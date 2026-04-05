@@ -18,13 +18,11 @@ let ``lintSource with interface naming violation produces expected warning`` () 
 
         test <@ messages.Length > 0 @>
 
-        let interfaceWarning =
-            messages |> List.tryFind (fun m -> m.Code = "FL0036")
+        let interfaceWarning = messages |> List.tryFind (fun m -> m.Code = "FL0036")
 
         test <@ interfaceWarning.IsSome @>
         test <@ interfaceWarning.Value.Message.Contains("I") @>
-    | Lint.LintResult.Failure failure ->
-        failwith $"Lint failed: {failure.Description}"
+    | Lint.LintResult.Failure failure -> failwith $"Lint failed: {failure.Description}"
 
 [<Fact>]
 let ``lintSource with clean code produces no warnings`` () =
@@ -36,5 +34,4 @@ let ``lintSource with clean code produces no warnings`` () =
     | Lint.LintResult.Success warnings ->
         let messages = warnings |> List.map mapWarning
         test <@ messages |> List.isEmpty @>
-    | Lint.LintResult.Failure failure ->
-        failwith $"Lint failed: {failure.Description}"
+    | Lint.LintResult.Failure failure -> failwith $"Lint failed: {failure.Description}"

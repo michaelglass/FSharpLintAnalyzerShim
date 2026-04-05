@@ -62,8 +62,7 @@ let ``mapWarning maps SuggestedFix to Fixes list when present`` () =
           FromRange = testRange
           ToText = "new" }
 
-    let warning =
-        makeWarning "SomeRule" "FL0001" "msg" (Some(lazy (Some suggestedFix)))
+    let warning = makeWarning "SomeRule" "FL0001" "msg" (Some(lazy (Some suggestedFix)))
 
     let result = mapWarning warning
 

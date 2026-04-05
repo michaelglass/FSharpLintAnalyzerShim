@@ -105,6 +105,7 @@ let ``Config is cached per directory`` () =
                 | Lint.ConfigurationParam.Configuration _ -> true
                 | _ -> false
             @>
+
         test <@ obj.ReferenceEquals(result1, result2) @>
     finally
         Directory.Delete(tempDir, true)
