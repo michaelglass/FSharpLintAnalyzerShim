@@ -1,0 +1,8 @@
+source https://api.nuget.org/v3/index.json
+
+storage: none
+
+nuget FSharp.Analyzers.SDK 0.36.0
+nuget FSharp.Core 10.0.101
+
+git https://github.com/michaelglass/FSharpLint.git perf/two-phase-lint-api

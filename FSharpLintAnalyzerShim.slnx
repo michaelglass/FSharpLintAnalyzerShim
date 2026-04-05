@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="FSharpLintAnalyzerShim.fsproj" />
+  <Folder Name="/tests/">
+    <Project Path="tests/FSharpLintAnalyzerShim.Tests/FSharpLintAnalyzerShim.Tests.fsproj" />
+  </Folder>
+</Solution>

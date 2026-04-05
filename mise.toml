@@ -1,0 +1,14 @@
+[tools]
+dotnet = "10.0"
+
+[tasks.build]
+description = "Build the solution"
+run = "dotnet build FSharpLintAnalyzerShim.slnx"
+
+[tasks.test]
+description = "Run tests"
+run = "dotnet test --solution FSharpLintAnalyzerShim.slnx"
+
+[tasks.check]
+description = "Run all checks"
+depends = ["build", "test"]
