@@ -61,19 +61,37 @@ All diagnostics use the standard FSharpLint rule codes (`FL0001` through `FL0097
 
 If FSharpLint encounters an internal error (which it normally swallows silently), the shim surfaces it as an `FL0000` Info diagnostic.
 
+## Rule suppression
+
+FSharpLint's built-in suppression mechanisms work through the shim with no extra configuration:
+
+**Inline comments** -- disable rules per-line or per-section:
+
+```fsharp
+// fsharplint:disable-next-line RecordFieldNames
+type Foo = { bar: int }
+
+// fsharplint:disable MaxLinesInFunction
+// ... long function ...
+// fsharplint:enable MaxLinesInFunction
+```
+
+Supported directives:
+
+| Directive | Effect |
+|---|---|
+| `// fsharplint:disable RuleName` | Disable for rest of file |
+| `// fsharplint:enable RuleName` | Re-enable |
+| `// fsharplint:disable-line RuleName` | Disable for current line |
+| `// fsharplint:disable-next-line RuleName` | Disable for next line |
+
+Omit the rule name to apply to all rules.
+
+**`fsharplint.json`** -- disable rules globally by setting `"enabled": false` on any rule. See the [FSharpLint documentation](https://fsprojects.github.io/FSharpLint/) for the full config format.
+
 ## Dependencies
 
-FSharpLint.Core is pulled from [michaelglass/FSharpLint](https://github.com/michaelglass/FSharpLint) (`perf/two-phase-lint-api` branch) via Paket git dependency. This fork includes FCS 43.10.101 compatibility required by the `fsharp-analyzers` CLI v0.36.0.
-
-## Rule coverage
-
-All 97 FSharpLint rules work, including:
-
-- **~75 rules** using only the untyped AST (formatting, source length, number-of-items, most smells)
-- **~21 rules** using file-level type checking (naming resolution, partial functions, shadowing, etc.)
-- **1 rule** using project-level type checking (NoAsyncRunSynchronouslyInLibrary)
-
-The `CliContext` provides all three: `ParseFileResults`, `CheckFileResults`, and `CheckProjectResults`.
+FSharpLint.Core is pulled from [michaelglass/FSharpLint](https://github.com/michaelglass/FSharpLint) (`perf/two-phase-lint-api` branch) via Paket git dependency. This branch merges [Numpsy's `fcs10` branch](https://github.com/numpsy/FSharpLint/tree/fcs10), which updated FSharpLint to FSharp.Compiler.Service 43.x -- huge thanks to [Numpsy (Richard Webb)](https://github.com/numpsy) for that work. The `perf/two-phase-lint-api` branch pins FCS to 43.10.101 for compatibility with the `fsharp-analyzers` CLI v0.36.0 and adds a two-phase lint API for analyzer integration.
 
 ## Development
 
