@@ -9,6 +9,18 @@ run = "dotnet build FSharpLintAnalyzerShim.slnx"
 description = "Run tests"
 run = "dotnet test --solution FSharpLintAnalyzerShim.slnx"
 
+[tasks.fmt]
+description = "Format F# files with fantomas"
+run = "dotnet fantomas LintAnalyzer.fs tests/"
+
+[tasks."fmt:check"]
+description = "Check F# formatting"
+run = "dotnet fantomas --check LintAnalyzer.fs tests/"
+
+[tasks.lint]
+description = "Run linters"
+depends = ["fmt:check"]
+
 [tasks.check]
 description = "Run all checks"
-depends = ["build", "test"]
+depends = ["lint", "build", "test"]

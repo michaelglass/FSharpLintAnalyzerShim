@@ -107,8 +107,6 @@ let lintAnalyzer: Analyzer<CliContext> =
                         @ [ makeErrorMessage
                                 "FSharpLint.InternalError"
                                 $"FSharpLint internal error: {ex.GetType().Name}: {ex.Message}" ]
-                | None ->
-                    return warnings |> List.map mapWarning
-            | LintResult.Failure failure ->
-                return [ makeErrorMessage "FSharpLint.Error" failure.Description ]
+                | None -> return warnings |> List.map mapWarning
+            | LintResult.Failure failure -> return [ makeErrorMessage "FSharpLint.Error" failure.Description ]
         }
