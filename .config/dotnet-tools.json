@@ -15,6 +15,41 @@
         "paket"
       ],
       "rollForward": false
+    },
+    "dotnet-fsharplint": {
+      "version": "0.26.10",
+      "commands": [
+        "dotnet-fsharplint"
+      ],
+      "rollForward": false
+    },
+    "fsdocs-tool": {
+      "version": "21.0.0",
+      "commands": [
+        "fsdocs"
+      ],
+      "rollForward": false
+    },
+    "syncdocs": {
+      "version": "0.2.0-alpha.1",
+      "commands": [
+        "syncdocs"
+      ],
+      "rollForward": false
+    },
+    "coverageratchet": {
+      "version": "0.2.0-alpha.1",
+      "commands": [
+        "coverageratchet"
+      ],
+      "rollForward": false
+    },
+    "fssemantictagger": {
+      "version": "0.2.0-alpha.1",
+      "commands": [
+        "fssemantictagger"
+      ],
+      "rollForward": false
     }
   }
 }
