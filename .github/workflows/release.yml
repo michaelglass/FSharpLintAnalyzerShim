@@ -16,6 +16,7 @@ jobs:
       tag-prefix: v
       fsproj-path: FSharpLintAnalyzerShim.fsproj
       paket-restore: true
+      no-build-pack: false
     permissions:
       contents: write
 
