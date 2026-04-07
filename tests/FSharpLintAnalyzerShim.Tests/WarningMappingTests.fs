@@ -75,11 +75,11 @@ let ``mapWarning returns empty Fixes when no SuggestedFix`` () =
     let warning = makeWarning "SomeRule" "FL0001" "msg" None
     let result = mapWarning warning
 
-    test <@ result.Fixes = [] @>
+    test <@ result.Fixes |> List.isEmpty @>
 
 [<Fact>]
 let ``mapWarning returns empty Fixes when SuggestedFix lazy evaluates to None`` () =
     let warning = makeWarning "SomeRule" "FL0001" "msg" (Some(lazy None))
     let result = mapWarning warning
 
-    test <@ result.Fixes = [] @>
+    test <@ result.Fixes |> List.isEmpty @>
