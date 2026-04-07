@@ -18,3 +18,4 @@ jobs:
       solution: FSharpLintAnalyzerShim.slnx
       fantomas-paths: 'LintAnalyzer.fs tests/'
       check-docs: false
+      paket-restore: true

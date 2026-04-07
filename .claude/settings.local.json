@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(mise check:*)"
+      "Bash(mise check:*)",
+      "Bash(gh run:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(curl -sL https://raw.githubusercontent.com/michaelglass/MichaelsWackyFsPackageTools/main/.github/workflows/michaels-wacky-build.yml)"
     ]
   }
 }
