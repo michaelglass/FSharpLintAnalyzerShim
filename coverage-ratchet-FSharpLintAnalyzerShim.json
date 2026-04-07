@@ -1,0 +1,574 @@
+{
+  "overrides": {
+    "AbstractSyntaxArray.fs": {
+      "line": 48.55072463768116,
+      "branch": 72.22222222222221,
+      "reason": "loosened automatically"
+    },
+    "ActivePatternNames.fs": {
+      "line": 71.42857142857143,
+      "branch": 37.5,
+      "reason": "loosened automatically"
+    },
+    "Ast.fs": {
+      "line": 15.566037735849056,
+      "branch": 12.931034482758621,
+      "reason": "loosened automatically"
+    },
+    "AstInfo.fs": {
+      "line": 87.5,
+      "branch": 37.5,
+      "reason": "loosened automatically"
+    },
+    "AsyncExceptionWithoutReturn.fs": {
+      "line": 15.277777777777779,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "AsynchronousFunctionNames.fs": {
+      "line": 24.561403508771928,
+      "branch": 6.666666666666667,
+      "reason": "loosened automatically"
+    },
+    "AvoidSinglePipeOperator.fs": {
+      "line": 14.285714285714285,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "AvoidTooShortNames.fs": {
+      "line": 14.666666666666666,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "BindingHelper.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "CanBeReplacedWithComposition.fs": {
+      "line": 20.689655172413794,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "ClassMemberSpacing.fs": {
+      "line": 28.947368421052634,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "Configuration.fs": {
+      "line": 40.77868852459016,
+      "branch": 20.602218700475436,
+      "reason": "loosened automatically"
+    },
+    "CyclomaticComplexity.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "DisallowShadowing.fs": {
+      "line": 4.395604395604396,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "DiscourageStringInterpolationWithStringFormat.fs": {
+      "line": 12.5,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "EnsureTailCallDiagnosticsInRecursiveFunctions.fs": {
+      "line": 17.073170731707318,
+      "branch": 20,
+      "reason": "loosened automatically"
+    },
+    "EnumCasesNames.fs": {
+      "line": 87.5,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "ExceptionNames.fs": {
+      "line": 77.77777777777779,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "FailwithBadUsage.fs": {
+      "line": 24.096385542168676,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "FailwithfWithArgumentsMatchingFormatString.fs": {
+      "line": 64,
+      "branch": 25,
+      "reason": "loosened automatically"
+    },
+    "FavourAsKeyword.fs": {
+      "line": 23.333333333333332,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "FavourConsistentThis.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "FavourIgnoreOverLetWild.fs": {
+      "line": 63.63636363636363,
+      "branch": 50,
+      "reason": "loosened automatically"
+    },
+    "FavourNamedMembers.fs": {
+      "line": 32.35294117647059,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "FavourNestedFunctions.fs": {
+      "line": 6.741573033707865,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "FavourNonMutablePropertyInitialization.fs": {
+      "line": 16.176470588235293,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "FavourReRaise.fs": {
+      "line": 41.02564102564102,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "FavourSingleton.fs": {
+      "line": 33.33333333333333,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "FavourStaticEmptyFields.fs": {
+      "line": 18.64406779661017,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "FavourTypedIgnore.fs": {
+      "line": 28.205128205128204,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "FunctionReimplementationHelper.fs": {
+      "line": 18.181818181818183,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "GenericTypesNames.fs": {
+      "line": 62.5,
+      "branch": 25,
+      "reason": "loosened automatically"
+    },
+    "HintMatcher.fs": {
+      "line": 3.71900826446281,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "HintParser.fs": {
+      "line": 93.51145038167938,
+      "branch": 43.75,
+      "reason": "loosened automatically"
+    },
+    "HintParserUtilities.fs": {
+      "line": 67.36842105263158,
+      "branch": 51.21951219512195,
+      "reason": "loosened automatically"
+    },
+    "HintsHelper.fs": {
+      "line": 24.137931034482758,
+      "branch": 14.285714285714285,
+      "reason": "loosened automatically"
+    },
+    "Indentation.fs": {
+      "line": 10.144927536231885,
+      "branch": 3.3333333333333335,
+      "reason": "loosened automatically"
+    },
+    "IndexerAccessorStyleConsistency.fs": {
+      "line": 0,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "InterfaceNames.fs": {
+      "line": 77.77777777777779,
+      "branch": 62.5,
+      "reason": "loosened automatically"
+    },
+    "InternalValuesNames.fs": {
+      "line": 72,
+      "branch": 16.666666666666664,
+      "reason": "loosened automatically"
+    },
+    "InterpolatedStringWithNoSubstitution.fs": {
+      "line": 50,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "Lint.fs": {
+      "line": 41.40625,
+      "branch": 23.387096774193548,
+      "reason": "loosened automatically"
+    },
+    "LintAnalyzer.fs": {
+      "line": 55.223880597014926,
+      "branch": 57.14285714285714,
+      "reason": "loosened automatically"
+    },
+    "LiteralNames.fs": {
+      "line": 64.28571428571429,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "MaxCharactersOnLine.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "MaxLinesInClass.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "MaxLinesInConstructor.fs": {
+      "line": 0,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "MaxLinesInEnum.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "MaxLinesInFile.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "MaxLinesInFunction.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "MaxLinesInLambdaFunction.fs": {
+      "line": 0,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "MaxLinesInMatchLambdaFunction.fs": {
+      "line": 0,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "MaxLinesInMember.fs": {
+      "line": 0,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "MaxLinesInModule.fs": {
+      "line": 0,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "MaxLinesInProperty.fs": {
+      "line": 0,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "MaxLinesInRecord.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "MaxLinesInUnion.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "MaxLinesInValue.fs": {
+      "line": 0,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "MaxNumberOfBooleanOperatorsInCondition.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "MaxNumberOfFunctionParameters.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "MaxNumberOfItemsInTuple.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "MaxNumberOfMembers.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "MeasureTypeNames.fs": {
+      "line": 77.77777777777779,
+      "branch": 62.5,
+      "reason": "loosened automatically"
+    },
+    "MemberNames.fs": {
+      "line": 60,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "ModuleDeclSpacing.fs": {
+      "line": 30.555555555555557,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "ModuleNames.fs": {
+      "line": 91.66666666666666,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "NamespaceNames.fs": {
+      "line": 75,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "NamingHelper.fs": {
+      "line": 58.4192439862543,
+      "branch": 30.14705882352941,
+      "reason": "loosened automatically"
+    },
+    "NestedFunctionNames.fs": {
+      "line": 0,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "NestedStatements.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "NoAsyncRunSynchronouslyInLibrary.fs": {
+      "line": 17.24137931034483,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "NoPartialFunctions.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "NoTabCharacters.fs": {
+      "line": 40,
+      "branch": 25,
+      "reason": "loosened automatically"
+    },
+    "ParameterNames.fs": {
+      "line": 56.666666666666664,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "ParseFile.fs": {
+      "line": 69.23076923076923,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "PatternMatchClauseIndentation.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "PatternMatchClausesOnNewLine.fs": {
+      "line": 44,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "PatternMatchExpressionIndentation.fs": {
+      "line": 36.666666666666664,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "PatternMatchFormattingHelper.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "PatternMatchOrClausesOnNewLine.fs": {
+      "line": 37.93103448275862,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "Prelude.fs": {
+      "line": 0,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "PrivateValuesNames.fs": {
+      "line": 56.25,
+      "branch": 12.5,
+      "reason": "loosened automatically"
+    },
+    "PublicValuesNames.fs": {
+      "line": 71.42857142857143,
+      "branch": 33.33333333333333,
+      "reason": "loosened automatically"
+    },
+    "RaiseWithTooManyArgumentsHelper.fs": {
+      "line": 47.05882352941176,
+      "branch": 50,
+      "reason": "loosened automatically"
+    },
+    "RecordFieldNames.fs": {
+      "line": 63.63636363636363,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "RecursiveAsyncFunction.fs": {
+      "line": 19.298245614035086,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "RedundantNewKeyword.fs": {
+      "line": 24.074074074074073,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "ReimplementsFunction.fs": {
+      "line": 28.57142857142857,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "Resources.fs": {
+      "line": 71.42857142857143,
+      "branch": 33.33333333333333,
+      "reason": "loosened automatically"
+    },
+    "Rules.fs": {
+      "line": 87.5,
+      "branch": 33.33333333333333,
+      "reason": "loosened automatically"
+    },
+    "SimpleAsyncComplementaryHelpers.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "SourceLengthHelper.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "SuggestUseAutoProperty.fs": {
+      "line": 13.253012048192772,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "Suggestion.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "Suppression.fs": {
+      "line": 87.8048780487805,
+      "branch": 83.33333333333334,
+      "reason": "loosened automatically"
+    },
+    "SynchronousFunctionNames.fs": {
+      "line": 51.21951219512195,
+      "branch": 43.75,
+      "reason": "loosened automatically"
+    },
+    "TrailingNewLineInFile.fs": {
+      "line": 50,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "TrailingWhitespaceOnLine.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "TupleCommaSpacing.fs": {
+      "line": 31.428571428571427,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "TupleFormattingHelper.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "TupleIndentation.fs": {
+      "line": 40.74074074074074,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "TupleOfWildcards.fs": {
+      "line": 26,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "TupleParentheses.fs": {
+      "line": 35.483870967741936,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "TypeNames.fs": {
+      "line": 70,
+      "branch": 62.5,
+      "reason": "loosened automatically"
+    },
+    "TypePrefixing.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "TypedItemSpacing.fs": {
+      "line": 0,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "UnionCasesNames.fs": {
+      "line": 87.5,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "UnionDefinitionIndentation.fs": {
+      "line": 21.568627450980394,
+      "branch": 0,
+      "reason": "loosened automatically"
+    },
+    "UnneededRecKeyword.fs": {
+      "line": 30.612244897959183,
+      "branch": 33.33333333333333,
+      "reason": "loosened automatically"
+    },
+    "UnnestedFunctionNames.fs": {
+      "line": 0,
+      "branch": 100,
+      "reason": "loosened automatically"
+    },
+    "UsedUnderscorePrefixedElements.fs": {
+      "line": 71.875,
+      "branch": 75,
+      "reason": "loosened automatically"
+    },
+    "UselessBinding.fs": {
+      "line": 54.54545454545454,
+      "branch": 31.25,
+      "reason": "loosened automatically"
+    },
+    "Utilities.fs": {
+      "line": 27.77777777777778,
+      "branch": 22.727272727272727,
+      "reason": "loosened automatically"
+    },
+    "WildcardNamedWithAsPattern.fs": {
+      "line": 52,
+      "branch": 0,
+      "reason": "loosened automatically"
+    }
+  }
+}

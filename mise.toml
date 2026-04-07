@@ -1,26 +1,63 @@
 [tools]
 dotnet = "10.0"
 
+[tasks.restore]
+description = "Restore dependencies"
+run = "dotnet restore"
+
+[tasks.tool-restore]
+description = "Restore local dotnet tools"
+run = "dotnet tool restore"
+
+[tasks.paket-restore]
+description = "Restore Paket dependencies"
+run = "dotnet tool run paket restore"
+depends = ["tool-restore"]
+
 [tasks.build]
 description = "Build the solution"
-run = "dotnet build FSharpLintAnalyzerShim.slnx"
+run = "dotnet build"
+depends = ["restore", "paket-restore"]
 
 [tasks.test]
-description = "Run tests"
-run = "dotnet test --solution FSharpLintAnalyzerShim.slnx"
+description = "Run tests with coverage"
+run = """
+dotnet test --project tests/FSharpLintAnalyzerShim.Tests \
+  --coverage \
+  --coverage-output-format cobertura \
+  --coverage-output "$PWD/coverage/FSharpLintAnalyzerShim/coverage.cobertura.xml"
+"""
+depends = ["build"]
 
-[tasks.fmt]
+[tasks.format]
 description = "Format F# files with fantomas"
 run = "dotnet fantomas LintAnalyzer.fs tests/"
+depends = ["tool-restore"]
 
-[tasks."fmt:check"]
+[tasks.format-check]
 description = "Check F# formatting"
 run = "dotnet fantomas --check LintAnalyzer.fs tests/"
+depends = ["tool-restore"]
 
 [tasks.lint]
-description = "Run linters"
-depends = ["fmt:check"]
+description = "Run FSharpLint"
+run = "dotnet fsharplint lint FSharpLintAnalyzerShim.slnx"
+depends = ["build", "tool-restore"]
+
+[tasks.coverage-check]
+description = "Check per-file coverage meets minimum threshold"
+run = "(cd coverage/FSharpLintAnalyzerShim && dotnet tool run coverageratchet check ../../coverage-ratchet-FSharpLintAnalyzerShim.json)"
+depends = ["test"]
+
+[tasks.coverage-ratchet]
+description = "Tighten coverage thresholds to current values"
+run = "(cd coverage/FSharpLintAnalyzerShim && dotnet tool run coverageratchet ratchet ../../coverage-ratchet-FSharpLintAnalyzerShim.json)"
+depends = ["test"]
 
 [tasks.check]
-description = "Run all checks"
-depends = ["lint", "build", "test"]
+description = "Run all checks with auto-fix"
+depends = ["format", "lint", "coverage-check"]
+
+[tasks.ci]
+description = "Run all CI checks (no auto-fix)"
+depends = ["format-check", "lint", "coverage-check"]
