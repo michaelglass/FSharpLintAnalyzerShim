@@ -1,10 +1,27 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <IsPackable>false</IsPackable>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <NoWarn>$(NoWarn);NU1608</NoWarn>
+
+    <!-- Package metadata -->
+    <PackageId>FSharpLintAnalyzerShim</PackageId>
+    <Version>0.1.0-alpha.1</Version>
+    <Authors>Michael Glass</Authors>
+    <Description>FSharpLint rules exposed as an FSharp.Analyzers.SDK CliAnalyzer</Description>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RepositoryUrl>https://github.com/michaelglass/FsharpLintAnalyzerShim</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>fsharp;analyzers;fsharplint;lint;fsharp-analyzers-sdk</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Include="LintAnalyzer.fs" />
   </ItemGroup>
@@ -13,6 +30,31 @@
     <PackageReference Update="FSharp.Core" Version="10.0.101" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="paket-files/github.com/michaelglass/FSharpLint/src/FSharpLint.Core/FSharpLint.Core.fsproj" />
+    <!-- PrivateAssets=all: bundle into nupkg instead of creating a NuGet dep
+         (FSharpLint.Core isn't published to NuGet). Test project must add its
+         own ProjectReference to FSharpLint.Core since this won't flow. -->
+    <ProjectReference Include="paket-files/github.com/michaelglass/FSharpLint/src/FSharpLint.Core/FSharpLint.Core.fsproj"
+                      PrivateAssets="all" />
   </ItemGroup>
+
+  <!-- === NuGet pack: bundle FSharpLint.Core + transitive deps ===
+       Analyzer DLLs are loaded by the host via reflection — all runtime deps
+       must be co-located. We bundle everything except DLLs the analyzer host
+       already provides (FSharp.Analyzers.SDK, FSharp.Compiler.Service, FSharp.Core).
+       We also suppress FSharpLint.Core from appearing as a NuGet dependency
+       (it's not published to NuGet — it comes from a Paket git dep). -->
+  <PropertyGroup>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);BundleDeps</TargetsForTfmSpecificBuildOutput>
+  </PropertyGroup>
+  <Target Name="BundleDeps" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths)"
+                            Condition="!$([System.String]::new('%(Filename)').StartsWith('FSharp.Analyzers.SDK'))
+                                       AND !$([System.String]::new('%(Filename)').StartsWith('FSharp.Compiler.Service'))
+                                       AND !$([System.String]::new('%(Filename)').StartsWith('FSharp.Core'))
+                                       AND !$([System.String]::new('%(Filename)').StartsWith('FSharp.DependencyManager'))
+                                       AND !$([System.String]::new('%(Filename)').StartsWith('McMaster'))
+                                       AND '%(Extension)' == '.dll'" />
+    </ItemGroup>
+  </Target>
 </Project>
