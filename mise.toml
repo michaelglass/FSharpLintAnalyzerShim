@@ -54,6 +54,26 @@ description = "Tighten coverage thresholds to current values"
 run = "(cd coverage/FSharpLintAnalyzerShim && dotnet tool run coverageratchet ratchet ../../coverage-ratchet-FSharpLintAnalyzerShim.json)"
 depends = ["test"]
 
+[tasks.pack]
+description = "Create NuGet package"
+run = "dotnet pack FSharpLintAnalyzerShim.fsproj -c Release -o artifacts"
+depends = ["restore", "paket-restore"]
+
+[tasks.check-api]
+description = "Check API changes since last release"
+run = "dotnet tool run fssemantictagger check"
+depends = ["restore", "tool-restore"]
+
+[tasks.release]
+description = "Tag a release based on API changes"
+run = "dotnet tool run fssemantictagger release auto"
+depends = ["restore", "tool-restore"]
+
+[tasks.release-alpha]
+description = "Tag an alpha release"
+run = "dotnet tool run fssemantictagger release alpha"
+depends = ["restore", "tool-restore"]
+
 [tasks.check]
 description = "Run all checks with auto-fix"
 depends = ["format", "lint", "coverage-check"]

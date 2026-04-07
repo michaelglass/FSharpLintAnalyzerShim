@@ -1,0 +1,10 @@
+{
+  "packages": [
+    {
+      "name": "FSharpLintAnalyzerShim",
+      "fsproj": "FSharpLintAnalyzerShim.fsproj",
+      "tagPrefix": "v"
+    }
+  ],
+  "preBuildCmds": ["dotnet tool restore", "dotnet tool run paket restore"]
+}

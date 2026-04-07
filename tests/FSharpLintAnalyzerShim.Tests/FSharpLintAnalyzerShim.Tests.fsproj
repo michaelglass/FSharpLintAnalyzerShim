@@ -14,6 +14,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../../FSharpLintAnalyzerShim.fsproj" />
+    <ProjectReference Include="../../paket-files/github.com/michaelglass/FSharpLint/src/FSharpLint.Core/FSharpLint.Core.fsproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigDiscoveryTests.fs" />
