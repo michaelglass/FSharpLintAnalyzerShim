@@ -66,12 +66,12 @@ depends = ["restore", "tool-restore"]
 
 [tasks.release]
 description = "Tag a release based on API changes"
-run = "dotnet tool run fssemantictagger release auto"
+run = "dotnet tool run fssemantictagger release"
 depends = ["restore", "tool-restore"]
 
 [tasks.release-alpha]
 description = "Tag an alpha release"
-run = "dotnet tool run fssemantictagger release alpha"
+run = "dotnet tool run fssemantictagger alpha"
 depends = ["restore", "tool-restore"]
 
 [tasks.check]
