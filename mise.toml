@@ -74,10 +74,15 @@ description = "Tag an alpha release"
 run = "dotnet tool run fssemantictagger alpha"
 depends = ["restore", "tool-restore"]
 
+[tasks.lint-project]
+description = "Run FsProjLint"
+run = "dotnet tool run fsprojlint"
+depends = ["tool-restore"]
+
 [tasks.check]
 description = "Run all checks with auto-fix"
-depends = ["format", "lint", "coverage-check"]
+depends = ["format", "lint", "lint-project", "coverage-check"]
 
 [tasks.ci]
 description = "Run all CI checks (no auto-fix)"
-depends = ["format-check", "lint", "coverage-check"]
+depends = ["format-check", "lint", "lint-project", "coverage-check"]
