@@ -54,6 +54,16 @@ description = "Tighten coverage thresholds to current values"
 run = "(cd coverage/FSharpLintAnalyzerShim && dotnet tool run coverageratchet ratchet ../../coverage-ratchet-FSharpLintAnalyzerShim.json)"
 depends = ["test"]
 
+[tasks.coverage-loosen]
+description = "Loosen coverage thresholds to current values"
+run = "(cd coverage/FSharpLintAnalyzerShim && dotnet tool run coverageratchet loosen ../../coverage-ratchet-FSharpLintAnalyzerShim.json)"
+depends = ["test"]
+
+[tasks.loosen-from-ci]
+description = "Merge coverage thresholds from CI artifacts"
+run = "(cd coverage/FSharpLintAnalyzerShim && dotnet tool run coverageratchet loosen-from-ci ../../coverage-ratchet-FSharpLintAnalyzerShim.json)"
+depends = ["test"]
+
 [tasks.pack]
 description = "Create NuGet package"
 run = "dotnet pack FSharpLintAnalyzerShim.fsproj -c Release -o artifacts"
@@ -81,7 +91,7 @@ depends = ["tool-restore"]
 
 [tasks.check]
 description = "Run all checks with auto-fix"
-depends = ["format", "lint", "lint-project", "coverage-check"]
+depends = ["format", "lint", "lint-project", "coverage-ratchet"]
 
 [tasks.ci]
 description = "Run all CI checks (no auto-fix)"
