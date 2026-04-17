@@ -16,31 +16,45 @@ let internal configCache = ConcurrentDictionary<string, ConfigurationParam>()
 
 /// Walk up from filePath looking for fsharplint.json, cache parsed config per directory.
 /// Parses eagerly so lintParsedFile doesn't re-read the JSON on every file.
+/// Populates the cache for every directory along the walk path, so sibling files
+/// at deeper levels don't each re-walk up to the same root.
 let internal getConfigParam (filePath: string) : ConfigurationParam =
-    let dir = Path.GetDirectoryName(Path.GetFullPath(filePath))
+    let startDir = Path.GetDirectoryName(Path.GetFullPath(filePath))
 
-    configCache.GetOrAdd(
-        dir,
-        fun dir ->
-            let rec walkUp (d: string) =
-                let candidate = Path.Combine(d, "fsharplint.json")
+    let rec walkUp (visited: string list) (d: string) : ConfigurationParam =
+        match configCache.TryGetValue(d) with
+        | true, cached ->
+            for v in visited do
+                configCache.TryAdd(v, cached) |> ignore
 
+            cached
+        | false, _ ->
+            let candidate = Path.Combine(d, "fsharplint.json")
+
+            let resolved =
                 if File.Exists(candidate) then
                     match Lint.getConfig (ConfigurationParam.FromFile candidate) with
-                    | Ok config -> ConfigurationParam.Configuration config
-                    | Error _ -> ConfigurationParam.FromFile candidate
+                    | Ok config -> Some(ConfigurationParam.Configuration config)
+                    | Error _ -> Some(ConfigurationParam.FromFile candidate)
                 else
                     let parent = Directory.GetParent(d)
 
                     if isNull parent then
                         match Lint.getConfig ConfigurationParam.Default with
-                        | Ok config -> ConfigurationParam.Configuration config
-                        | Error _ -> ConfigurationParam.Default
+                        | Ok config -> Some(ConfigurationParam.Configuration config)
+                        | Error _ -> Some ConfigurationParam.Default
                     else
-                        walkUp parent.FullName
+                        None
 
-            walkUp dir
-    )
+            match resolved with
+            | Some r ->
+                for v in d :: visited do
+                    configCache.TryAdd(v, r) |> ignore
+
+                r
+            | None -> walkUp (d :: visited) (Directory.GetParent(d).FullName)
+
+    walkUp [] startDir
 
 /// Map a FSharpLint SuggestedFix to an Analyzer SDK Fix.
 let internal mapFix (suggestedFix: SuggestedFix) : Fix =
