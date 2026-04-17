@@ -210,11 +210,19 @@
       "branch": 23.387096774193548,
       "reason": "loosened automatically"
     },
-    "LintAnalyzer.fs": {
-      "line": 55.223880597014926,
-      "branch": 57.14285714285714,
-      "reason": "loosened automatically"
-    },
+    "LintAnalyzer.fs": [
+      {
+        "line": 55.223880597014926,
+        "branch": 57.14285714285714,
+        "reason": "loosened automatically",
+        "platform": "macos"
+      },
+      {
+        "line": 53,
+        "branch": 65,
+        "platform": "linux"
+      }
+    ],
     "LiteralNames.fs": {
       "line": 64.28571428571429,
       "branch": 100,
