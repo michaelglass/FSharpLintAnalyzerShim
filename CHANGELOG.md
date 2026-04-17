@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- Config lookup: cache the resolved `ConfigurationParam` on every directory
+  along the walk path, not just the starting directory. With N source
+  directories sharing one root `fsharplint.json`, each lookup now short-
+  circuits on the first cache hit rather than re-walking to the root.
+
+## v0.2.0-alpha.2
+
 - **Migrate to FSharp.Compiler.Service 43.12.202** (was 43.10.101).
   Required to avoid `MissingMethodException: LetOrUse.get_isBang()` when
   hosted by analyzer runners built against FCS 43.12 (the current Ionide /
