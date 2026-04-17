@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- **Migrate to FSharp.Compiler.Service 43.12.202** (was 43.10.101).
+  Required to avoid `MissingMethodException: LetOrUse.get_isBang()` when
+  hosted by analyzer runners built against FCS 43.12 (the current Ionide /
+  fshw stack). Shim fsproj now pins FCS 43.12.202 explicitly, overriding
+  the SDK 0.36.0 transitive pin at 43.10.101. FSharp.Core bumped to 10.1.202
+  to match.
 - Add LICENSE file (MIT)
 - Wire up fsprojlint linting in mise.toml
 - Update NuGet dependencies to latest versions

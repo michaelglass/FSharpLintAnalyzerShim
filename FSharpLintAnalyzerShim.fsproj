@@ -27,7 +27,11 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FSharp.Analyzers.SDK" Version="0.36.0" />
-    <PackageReference Update="FSharp.Core" Version="10.0.101" />
+    <!-- Override SDK's FCS 43.10.101 pin to match FSharpLint.Core (43.12) and typical
+         analyzer hosts (fshw pins 43.12.202). Required for binary compat with the
+         host's AST types; SDK itself only touches stable surface. -->
+    <PackageReference Include="FSharp.Compiler.Service" Version="43.12.202" />
+    <PackageReference Update="FSharp.Core" Version="10.1.202" />
   </ItemGroup>
   <ItemGroup>
     <!-- PrivateAssets=all: bundle into nupkg instead of creating a NuGet dep
