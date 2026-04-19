@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <!-- This project intentionally contains FSharpLint violations; suppress compiler warnings
+         (naming, unused bindings, shadowed identifiers) so it builds cleanly. -->
+    <NoWarn>$(NoWarn);FS0025;FS0026;FS0046;FS0064;FS0067;FS0086;FS0988;FS1182;FS3186;FS3517;FS3560;FS0020;FS0021;FS0042</NoWarn>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Rules/Naming.fs" />
+    <Compile Include="Rules/Bindings.fs" />
+    <Compile Include="Rules/Conventions.fs" />
+    <Compile Include="Rules/Smells.fs" />
+    <Compile Include="Rules/SizeLimits.fs" />
+    <Compile Include="Rules/Typography.fs" />
+    <Compile Include="Rules/Formatting.fs" />
+    <Compile Include="Rules/Hints.fs" />
+    <Compile Include="Rules/Clean.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="10.1.202" />
+  </ItemGroup>
+</Project>
