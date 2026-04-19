@@ -1,0 +1,188 @@
+{
+  "ignoreFiles": [],
+  "global": {
+    "numIndentationSpaces": 4
+  },
+  "typedItemSpacing": {
+    "enabled": true,
+    "config": { "typedItemStyle": "SpaceAfter" }
+  },
+  "typePrefixing": {
+    "enabled": true,
+    "config": { "mode": "Hybrid" }
+  },
+  "unionDefinitionIndentation": { "enabled": true },
+  "moduleDeclSpacing": { "enabled": true },
+  "classMemberSpacing": { "enabled": true },
+  "tupleCommaSpacing": { "enabled": true },
+  "tupleIndentation": { "enabled": true },
+  "tupleParentheses": { "enabled": true },
+  "patternMatchClausesOnNewLine": { "enabled": true },
+  "patternMatchOrClausesOnNewLine": { "enabled": true },
+  "patternMatchClauseIndentation": { "enabled": true, "config": { "allowSingleLineLambda": false } },
+  "patternMatchExpressionIndentation": { "enabled": true },
+  "recursiveAsyncFunction": { "enabled": true },
+  "redundantNewKeyword": { "enabled": true },
+  "nestedStatements": { "enabled": true, "config": { "depth": 4 } },
+  "cyclomaticComplexity": { "enabled": true, "config": { "maxComplexity": 3 } },
+  "reimplementsFunction": { "enabled": true },
+  "canBeReplacedWithComposition": { "enabled": true },
+  "avoidSinglePipeOperator": { "enabled": true },
+  "usedUnderscorePrefixedElements": { "enabled": true },
+  "failwithWithSingleArgument": { "enabled": true },
+  "raiseWithSingleArgument": { "enabled": true },
+  "nullArgWithSingleArgument": { "enabled": true },
+  "invalidOpWithSingleArgument": { "enabled": true },
+  "invalidArgWithTwoArguments": { "enabled": true },
+  "failwithfWithArgumentsMatchingFormatString": { "enabled": true },
+  "failwithBadUsage": { "enabled": true },
+  "maxLinesInLambdaFunction": { "enabled": true, "config": { "maxLines": 5 } },
+  "maxLinesInMatchLambdaFunction": { "enabled": true, "config": { "maxLines": 10 } },
+  "maxLinesInValue": { "enabled": true, "config": { "maxLines": 10 } },
+  "maxLinesInFunction": { "enabled": true, "config": { "maxLines": 15 } },
+  "maxLinesInMember": { "enabled": true, "config": { "maxLines": 15 } },
+  "maxLinesInConstructor": { "enabled": true, "config": { "maxLines": 10 } },
+  "maxLinesInProperty": { "enabled": true, "config": { "maxLines": 10 } },
+  "maxLinesInModule": { "enabled": true, "config": { "maxLines": 200 } },
+  "maxLinesInRecord": { "enabled": true, "config": { "maxLines": 10 } },
+  "maxLinesInEnum": { "enabled": true, "config": { "maxLines": 10 } },
+  "maxLinesInUnion": { "enabled": true, "config": { "maxLines": 10 } },
+  "maxLinesInClass": { "enabled": true, "config": { "maxLines": 30 } },
+  "interfaceNames": {
+    "enabled": true,
+    "config": { "naming": "PascalCase", "underscores": "None", "prefix": "I" }
+  },
+  "exceptionNames": {
+    "enabled": true,
+    "config": { "naming": "PascalCase", "underscores": "None", "suffix": "Exception" }
+  },
+  "typeNames": {
+    "enabled": true,
+    "config": { "naming": "PascalCase", "underscores": "None" }
+  },
+  "recordFieldNames": {
+    "enabled": true,
+    "config": { "naming": "PascalCase", "underscores": "None" }
+  },
+  "enumCasesNames": {
+    "enabled": true,
+    "config": { "naming": "PascalCase", "underscores": "None" }
+  },
+  "unionCasesNames": {
+    "enabled": true,
+    "config": { "naming": "PascalCase", "underscores": "None" }
+  },
+  "moduleNames": {
+    "enabled": true,
+    "config": { "naming": "PascalCase", "underscores": "None" }
+  },
+  "literalNames": {
+    "enabled": true,
+    "config": { "naming": "PascalCase", "underscores": "None" }
+  },
+  "namespaceNames": {
+    "enabled": true,
+    "config": { "naming": "PascalCase", "underscores": "None" }
+  },
+  "memberNames": {
+    "enabled": true,
+    "config": { "naming": "PascalCase", "underscores": "AllowPrefix" }
+  },
+  "parameterNames": {
+    "enabled": true,
+    "config": { "naming": "CamelCase", "underscores": "AllowPrefix" }
+  },
+  "measureTypeNames": {
+    "enabled": true,
+    "config": { "underscores": "None" }
+  },
+  "activePatternNames": {
+    "enabled": true,
+    "config": { "naming": "PascalCase", "underscores": "None" }
+  },
+  "genericTypesNames": {
+    "enabled": true,
+    "config": { "naming": "PascalCase", "underscores": "None" }
+  },
+  "publicValuesNames": {
+    "enabled": true,
+    "config": { "naming": "CamelCase", "underscores": "AllowPrefix" }
+  },
+  "privateValuesNames": {
+    "enabled": true,
+    "config": { "naming": "CamelCase", "underscores": "AllowPrefix" }
+  },
+  "internalValuesNames": {
+    "enabled": true,
+    "config": { "naming": "CamelCase", "underscores": "AllowPrefix" }
+  },
+  "unnestedFunctionNames": {
+    "enabled": true,
+    "config": { "naming": "CamelCase", "underscores": "AllowPrefix" }
+  },
+  "nestedFunctionNames": {
+    "enabled": true,
+    "config": { "naming": "CamelCase", "underscores": "AllowPrefix" }
+  },
+  "maxNumberOfItemsInTuple": { "enabled": true, "config": { "maxItems": 3 } },
+  "maxNumberOfFunctionParameters": { "enabled": true, "config": { "maxItems": 4 } },
+  "maxNumberOfMembers": { "enabled": true, "config": { "maxItems": 4 } },
+  "maxNumberOfBooleanOperatorsInCondition": { "enabled": true, "config": { "maxItems": 3 } },
+  "favourIgnoreOverLetWild": { "enabled": true },
+  "wildcardNamedWithAsPattern": { "enabled": true },
+  "uselessBinding": { "enabled": true },
+  "tupleOfWildcards": { "enabled": true },
+  "favourTypedIgnore": { "enabled": true },
+  "favourNonMutablePropertyInitialization": { "enabled": true },
+  "favourReRaise": { "enabled": true },
+  "favourStaticEmptyFields": { "enabled": true },
+  "favourConsistentThis": { "enabled": true, "config": { "symbol": "this" } },
+  "suggestUseAutoProperty": { "enabled": true },
+  "avoidTooShortNames": { "enabled": true },
+  "asyncExceptionWithoutReturn": { "enabled": true },
+  "unneededRecKeyword": { "enabled": true },
+  "indentation": { "enabled": true },
+  "maxCharactersOnLine": {
+    "enabled": true,
+    "config": { "maxCharactersOnLine": 100 }
+  },
+  "trailingWhitespaceOnLine": {
+    "enabled": true,
+    "config": { "numberOfSpacesAllowed": 0, "oneSpaceAllowedAfterOperator": false, "ignoreBlankLines": false }
+  },
+  "maxLinesInFile": { "enabled": true, "config": { "maxLinesInFile": 200 } },
+  "trailingNewLineInFile": { "enabled": true },
+  "noTabCharacters": { "enabled": true },
+  "noPartialFunctions": {
+    "enabled": true,
+    "config": { "allowedPartials": [], "additionalPartials": [] }
+  },
+  "ensureTailCallDiagnosticsInRecursiveFunctions": { "enabled": true },
+  "favourAsKeyword": { "enabled": true },
+  "interpolatedStringWithNoSubstitution": { "enabled": true },
+  "indexerAccessorStyleConsistency": { "enabled": true, "config": { "style": "OCaml" } },
+  "favourSingleton": { "enabled": true },
+  "noAsyncRunSynchronouslyInLibrary": { "enabled": true },
+  "favourNestedFunctions": { "enabled": true },
+  "disallowShadowing": { "enabled": true },
+  "discourageStringInterpolationWithStringFormat": { "enabled": true },
+  "favourNamedMembers": { "enabled": true },
+  "synchronousFunctionNames": { "enabled": true },
+  "asynchronousFunctionNames": { "enabled": true, "config": { "mode": "OnlyPublicAPIsInLibraries" } },
+  "simpleAsyncComplementaryHelpers": { "enabled": true, "config": { "mode": "OnlyPublicAPIsInLibraries" } },
+  "hints": {
+    "enabled": true,
+    "add": [
+      "not (a =  b) ===> a <> b",
+      "not (a <> b) ===> a =  b",
+      "List.head (List.sort x) ===> List.min x",
+      "List.map f (List.map g x) ===> List.map (g >> f) x",
+      "List.rev (List.rev x) ===> x",
+      "(List.length x) = 0 ===> List.isEmpty x",
+      "x = [] ===> List.isEmpty x",
+      "if a then true else false ===> a",
+      "fun x -> x ===> id",
+      "x = null ===> isNull x"
+    ]
+  }
+}
