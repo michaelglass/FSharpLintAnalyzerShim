@@ -230,7 +230,9 @@ let ``lintAnalyzer returns FL0000 error message when config file is invalid`` ()
 
     // Override the cached config for Clean.fs's dir with a broken file path so
     // Lint.getConfig returns an error, exercising the LintResult.Failure branch.
-    let brokenConfigPath = Path.Combine(rulesDir, "__definitely-not-a-real-config__.json")
+    let brokenConfigPath =
+        Path.Combine(rulesDir, "__definitely-not-a-real-config__.json")
+
     File.WriteAllText(brokenConfigPath, "{ this is not valid json ")
 
     try
@@ -244,8 +246,10 @@ let ``lintAnalyzer returns FL0000 error message when config file is invalid`` ()
         test <@ messages |> List.exists (fun m -> m.Code = "FL0000") @>
 
         test
-            <@ messages
-               |> List.exists (fun m -> m.Code = "FL0000" && m.Severity = Severity.Info) @>
+            <@
+                messages
+                |> List.exists (fun m -> m.Code = "FL0000" && m.Severity = Severity.Info)
+            @>
     finally
         File.Delete brokenConfigPath
         configCache.Clear()
