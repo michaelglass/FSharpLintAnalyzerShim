@@ -20,5 +20,6 @@
     <Compile Include="ConfigDiscoveryTests.fs" />
     <Compile Include="WarningMappingTests.fs" />
     <Compile Include="IntegrationTests.fs" />
+    <Compile Include="AllRulesCoverageTests.fs" />
   </ItemGroup>
 </Project>

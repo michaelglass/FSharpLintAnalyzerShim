@@ -1,5 +1,6 @@
 [tools]
 dotnet = "10.0"
+"github:sharkdp/hyperfine" = "1.19.0"
 
 [tasks.restore]
 description = "Restore dependencies"
@@ -96,3 +97,8 @@ depends = ["format", "lint", "lint-project", "coverage-ratchet"]
 [tasks.ci]
 description = "Run all CI checks (no auto-fix)"
 depends = ["format-check", "lint", "lint-project", "coverage-check"]
+
+[tasks.benchmark]
+description = "Run hyperfine benchmarks comparing FSharpLint CLI vs shim"
+run = "bash benchmarks/run.sh"
+depends = ["build", "tool-restore"]
