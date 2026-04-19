@@ -10,7 +10,10 @@ open FSharpLintAnalyzerShim.LintAnalyzer
 /// Walk up from the test binary to find the repository root (where README.md lives).
 let private repoRoot =
     let rec walkUp (dir: string) =
-        if File.Exists(Path.Combine(dir, "README.md")) && File.Exists(Path.Combine(dir, "LintAnalyzer.fs")) then
+        if
+            File.Exists(Path.Combine(dir, "README.md"))
+            && File.Exists(Path.Combine(dir, "LintAnalyzer.fs"))
+        then
             dir
         else
             let parent = Directory.GetParent(dir)
@@ -37,7 +40,8 @@ let private lintSampleProjectViaShim () : Message list =
 
     match
         Lint.lintProject
-            { Lint.OptionalLintParameters.Default with Configuration = configParam }
+            { Lint.OptionalLintParameters.Default with
+                Configuration = configParam }
             sampleProject
             toolsPath.Value
     with
@@ -47,7 +51,12 @@ let private lintSampleProjectViaShim () : Message list =
 let private lintFileViaShim (filePath: string) : Message list =
     let configParam = getConfigParam filePath
 
-    match Lint.lintFile { Lint.OptionalLintParameters.Default with Configuration = configParam } filePath with
+    match
+        Lint.lintFile
+            { Lint.OptionalLintParameters.Default with
+                Configuration = configParam }
+            filePath
+    with
     | LintResult.Success warnings -> warnings |> List.map mapWarning
     | LintResult.Failure failure -> failwith $"Lint failed on {filePath}: {failure.Description}"
 
@@ -146,7 +155,12 @@ let ``every sample file is loadable and lintable without Lint.Failure`` () =
     for file in ruleFiles do
         let configParam = getConfigParam file
 
-        match Lint.lintFile { Lint.OptionalLintParameters.Default with Configuration = configParam } file with
+        match
+            Lint.lintFile
+                { Lint.OptionalLintParameters.Default with
+                    Configuration = configParam }
+                file
+        with
         | LintResult.Success _ -> ()
         | LintResult.Failure failure -> failwithf "lint failed on %s: %s" file failure.Description
 
@@ -163,3 +177,75 @@ let ``shim config discovery finds sample fsharplint.json`` () =
     test <@ codes.Contains "FL0075" @>
     // Keep sampleConfig referenced to avoid unused binding.
     test <@ File.Exists sampleConfig @>
+
+open FSharp.Compiler.CodeAnalysis
+open FSharp.Compiler.Text
+
+/// Parse + type-check `filePath` and build a CliContext for invoking the [<CliAnalyzer>] directly.
+let private buildCliContext (filePath: string) : CliContext =
+    let checker = FSharpChecker.Create(keepAssemblyContents = true)
+    let source = File.ReadAllText filePath
+    let sourceText = SourceText.ofString source
+
+    let projectOptions, _ =
+        checker.GetProjectOptionsFromScript(filePath, sourceText, assumeDotNetFramework = false)
+        |> Async.RunSynchronously
+
+    let parseResults, checkAnswer =
+        checker.ParseAndCheckFileInProject(filePath, 0, sourceText, projectOptions)
+        |> Async.RunSynchronously
+
+    let checkResults =
+        match checkAnswer with
+        | FSharpCheckFileAnswer.Succeeded r -> r
+        | FSharpCheckFileAnswer.Aborted -> failwith "type check aborted"
+
+    let projectResults =
+        checker.ParseAndCheckProject projectOptions |> Async.RunSynchronously
+
+    { FileName = filePath
+      SourceText = sourceText
+      ParseFileResults = parseResults
+      CheckFileResults = checkResults
+      TypedTree = checkResults.ImplementationFile
+      CheckProjectResults = projectResults
+      ProjectOptions = AnalyzerProjectOptions.BackgroundCompilerOptions projectOptions
+      AnalyzerIgnoreRanges = Map.empty }
+
+[<Fact>]
+let ``lintAnalyzer [<CliAnalyzer>] entry point returns mapped warnings for a file with violations`` () =
+    let sampleFile = Path.Combine(rulesDir, "Naming.fs")
+    let ctx = buildCliContext sampleFile
+    let messages = lintAnalyzer ctx |> Async.RunSynchronously
+    let codes = messages |> List.map (fun m -> m.Code) |> Set.ofList
+    // Naming.fs is rich in naming violations; pick a few stable ones to assert.
+    test <@ codes.Contains "FL0036" @> // InterfaceNames
+    test <@ codes.Contains "FL0075" @> // AvoidTooShortNames
+    test <@ messages |> List.forall (fun m -> m.Severity = Severity.Warning) @>
+
+[<Fact>]
+let ``lintAnalyzer returns FL0000 error message when config file is invalid`` () =
+    let sampleFile = Path.Combine(rulesDir, "Clean.fs")
+    let ctx = buildCliContext sampleFile
+
+    // Override the cached config for Clean.fs's dir with a broken file path so
+    // Lint.getConfig returns an error, exercising the LintResult.Failure branch.
+    let brokenConfigPath = Path.Combine(rulesDir, "__definitely-not-a-real-config__.json")
+    File.WriteAllText(brokenConfigPath, "{ this is not valid json ")
+
+    try
+        configCache.Clear()
+
+        let cleanDir = Path.GetDirectoryName sampleFile
+        configCache.[cleanDir] <- Lint.ConfigurationParam.FromFile brokenConfigPath
+
+        let messages = lintAnalyzer ctx |> Async.RunSynchronously
+
+        test <@ messages |> List.exists (fun m -> m.Code = "FL0000") @>
+
+        test
+            <@ messages
+               |> List.exists (fun m -> m.Code = "FL0000" && m.Severity = Severity.Info) @>
+    finally
+        File.Delete brokenConfigPath
+        configCache.Clear()
