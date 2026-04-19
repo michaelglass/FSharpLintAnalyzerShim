@@ -212,8 +212,8 @@
     },
     "LintAnalyzer.fs": [
       {
-        "line": 55.223880597014926,
-        "branch": 57.14285714285714,
+        "line": 90,
+        "branch": 85,
         "reason": "loosened automatically",
         "platform": "macos"
       },
