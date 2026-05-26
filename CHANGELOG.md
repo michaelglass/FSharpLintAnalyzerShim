@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+- Bump `Microsoft.Testing.Extensions.CodeCoverage` 18.6.2 → 18.7.0.
+  Other external deps held: FSharp.Compiler.Service stays at 43.12.202 and
+  FSharp.Core at 10.1.202 to remain binary-compatible with analyzer hosts
+  (fshw pins FCS 43.12.202) and FSharpLint.Core's central pin; FSharp.Analyzers.SDK
+  stays at 0.36.0. No YamlDotNet dependency exists (this FSharpLint branch uses
+  JSON config).
 - Config lookup: cache the resolved `ConfigurationParam` on every directory
   along the walk path, not just the starting directory. With N source
   directories sharing one root `fsharplint.json`, each lookup now short-
