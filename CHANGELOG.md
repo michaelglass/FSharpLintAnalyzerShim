@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.0-alpha.3 - 2026-05-28
+
 - security: pin transitive `System.Security.Cryptography.Xml` to 10.0.8 (9.0.0 has GHSA-37gx-xxp4-5rgx, High severity) via repo-root `Directory.Build.props`.
 - Bump `FSharp.Compiler.Service` 43.12.202 → 43.12.204 and the coupled `FSharp.Core` 10.1.202 → 10.1.204 (both stay inside the 10.1.* pin).
 
