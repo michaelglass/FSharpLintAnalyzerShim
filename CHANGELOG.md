@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.0-alpha.2 - 2026-05-28
+
 - Bump `Microsoft.Testing.Extensions.CodeCoverage` 18.6.2 → 18.7.0.
   Other external deps held: FSharp.Compiler.Service stays at 43.12.202 and
   FSharp.Core at 10.1.202 to remain binary-compatible with analyzer hosts
