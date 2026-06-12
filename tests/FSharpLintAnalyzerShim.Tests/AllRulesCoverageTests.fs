@@ -1,3 +1,6 @@
+/// Shares the "ConfigCache" collection with ConfigDiscoveryTests: both mutate
+/// the shim's module-level configCache, so they must not run in parallel.
+[<Xunit.Collection("ConfigCache")>]
 module FSharpLintAnalyzerShim.Tests.AllRulesCoverageTests
 
 open System.IO
