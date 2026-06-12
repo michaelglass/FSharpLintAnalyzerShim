@@ -141,6 +141,8 @@ Sixty distinct rule codes are triggered and asserted in-process. Rules that requ
 mise run benchmark
 ```
 
+The FsHotWatch scenarios assume a [FsHotWatch](https://github.com/michaelglass/FsHotWatch) checkout as a sibling directory of this repo; point `FSHW_ROOT` at a checkout elsewhere to override (relative paths resolve from this repo's root), or they are skipped when absent.
+
 Results below are from an M-series Mac, 5 runs + 1 warmup per scenario, against published `dotnet-fsharplint` 0.26.10.
 
 ### SampleProject — 9 files, one fsproj
