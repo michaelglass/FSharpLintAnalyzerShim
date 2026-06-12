@@ -39,7 +39,7 @@ let private toolsPath =
 /// Lint the whole sample project in-process with the shim's config-discovery applied
 /// to a representative source file. Returns Messages (shim-mapped from LintWarning).
 let private lintSampleProjectViaShim () : Message list =
-    let configParam = getConfigParam (Path.Combine(rulesDir, "Naming.fs"))
+    let configParam, _ = getConfigParam (Path.Combine(rulesDir, "Naming.fs"))
 
     match
         Lint.lintProject
@@ -52,7 +52,7 @@ let private lintSampleProjectViaShim () : Message list =
     | LintResult.Failure failure -> failwith $"Lint failed on project: {failure.Description}"
 
 let private lintFileViaShim (filePath: string) : Message list =
-    let configParam = getConfigParam filePath
+    let configParam, _ = getConfigParam filePath
 
     match
         Lint.lintFile
@@ -156,7 +156,7 @@ let ``every sample file is loadable and lintable without Lint.Failure`` () =
     let ruleFiles = Directory.GetFiles(rulesDir, "*.fs")
 
     for file in ruleFiles do
-        let configParam = getConfigParam file
+        let configParam, _ = getConfigParam file
 
         match
             Lint.lintFile
@@ -242,7 +242,7 @@ let ``lintAnalyzer returns FL0000 error message when config file is invalid`` ()
         configCache.Clear()
 
         let cleanDir = Path.GetDirectoryName sampleFile
-        configCache.[cleanDir] <- Lint.ConfigurationParam.FromFile brokenConfigPath
+        configCache.[cleanDir] <- (Lint.ConfigurationParam.FromFile brokenConfigPath, [])
 
         let messages = lintAnalyzer ctx |> Async.RunSynchronously
 
@@ -256,3 +256,43 @@ let ``lintAnalyzer returns FL0000 error message when config file is invalid`` ()
     finally
         File.Delete brokenConfigPath
         configCache.Clear()
+
+[<Fact>]
+let ``malformed fsharplint.json surfaces an immediate diagnostic naming the file and linting proceeds`` () =
+    let tempDir = Path.Combine(Path.GetTempPath(), System.Guid.NewGuid().ToString("N"))
+
+    Directory.CreateDirectory(tempDir) |> ignore
+
+    try
+        let configPath = Path.Combine(tempDir, "fsharplint.json")
+        File.WriteAllText(configPath, "{ this is not valid json ")
+
+        // A file with a violation FSharpLint's DEFAULT config catches (FL0036),
+        // proving linting still runs after the config-load failure.
+        let sourceFile = Path.Combine(tempDir, "Probe.fs")
+
+        File.WriteAllText(
+            sourceFile,
+            "module Probe\n\ntype iMyInterface =\n    abstract member DoStuff: unit -> unit\n"
+        )
+
+        configCache.Clear()
+
+        let ctx = buildCliContext sourceFile
+        let messages = lintAnalyzer ctx |> Async.RunSynchronously
+
+        // The config failure surfaces immediately as a Warning naming the offending file.
+        test
+            <@
+                messages
+                |> List.exists (fun m ->
+                    m.Code = "FL0000"
+                    && m.Severity = Severity.Warning
+                    && m.Message.Contains(configPath))
+            @>
+
+        // Linting fell back to the default config instead of aborting the file.
+        test <@ messages |> List.exists (fun m -> m.Code = "FL0036") @>
+    finally
+        configCache.Clear()
+        Directory.Delete(tempDir, true)
