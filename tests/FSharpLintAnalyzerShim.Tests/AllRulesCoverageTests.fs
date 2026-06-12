@@ -1,6 +1,7 @@
-/// Shares the "ConfigCache" collection with ConfigDiscoveryTests: both mutate
-/// the shim's module-level configCache, so they must not run in parallel.
-[<Xunit.Collection("ConfigCache")>]
+/// In the SharedLintState collection: mutates the module-level configCache and
+/// drives heavy FSharpChecker project typechecks, so it must not run in parallel
+/// with the other cache-mutating or FCS-heavy modules.
+[<Xunit.Collection("SharedLintState")>]
 module FSharpLintAnalyzerShim.Tests.AllRulesCoverageTests
 
 open System.IO
