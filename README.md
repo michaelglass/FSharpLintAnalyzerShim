@@ -73,10 +73,12 @@ Because `fsharp-analyzers` 0.36.0 — the only published `fsharp-analyzers` rele
 
 All FSharpLint rule diagnostics use the standard FSharpLint rule codes (`FL0001` through `FL0097`). Severity is always `Warning`. Suggested fixes from FSharpLint are passed through as Analyzer SDK `Fix` records.
 
-The shim also emits `FL0000` diagnostics for its own conditions:
+The shim also emits `FL0000` diagnostics (all at `Warning` severity — CI hosts suppress `Info`/`Hint`) for its own conditions:
 
-- **`FSharpLint.HostIncompatible`** (`Warning`) — the analyzer host loaded an FCS minor version the shim can't bind against (see [Host compatibility](#host-compatibility)).
+- **`FSharpLint.HostIncompatible`** — the analyzer host loaded an FCS minor version the shim can't bind against (see [Host compatibility](#host-compatibility)).
+- **`FSharpLint.ConfigError`** — a discovered `fsharplint.json` could not be parsed; the diagnostic names the file and the parse error, and linting proceeds with FSharpLint's default configuration.
 - **`FSharpLint.InternalError`** — FSharpLint hit an internal error it would otherwise swallow silently; the shim surfaces it instead of dropping it.
+- **`FSharpLint.Error`** — FSharpLint reported a lint failure for the file (its description is passed through).
 
 ## Rule suppression
 

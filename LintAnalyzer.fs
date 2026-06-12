@@ -139,11 +139,15 @@ let internal mapWarning (warning: LintWarning) : Message =
       Range = warning.Details.Range
       Fixes = fixes }
 
+/// Internal lint failures (LintResult.Failure and recovered exceptions) surface as
+/// Warning, not Info: CI analyzer hosts suppress Info/Hint diagnostics, which would
+/// silently hide a degraded lint run. Error is reserved by convention for
+/// build-failing diagnostics, which a recoverable internal failure is not.
 let private makeErrorMessage (typeName: string) (message: string) : Message =
     { Type = typeName
       Message = message
       Code = "FL0000"
-      Severity = Severity.Info
+      Severity = Severity.Warning
       Range = Range.range0
       Fixes = [] }
 

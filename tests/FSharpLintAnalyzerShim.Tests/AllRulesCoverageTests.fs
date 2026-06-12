@@ -248,10 +248,12 @@ let ``lintAnalyzer returns FL0000 error message when config file is invalid`` ()
 
         test <@ messages |> List.exists (fun m -> m.Code = "FL0000") @>
 
+        // Internal lint failures must be visible in CI hosts, which suppress
+        // Info/Hint diagnostics — so they surface as Warning.
         test
             <@
                 messages
-                |> List.exists (fun m -> m.Code = "FL0000" && m.Severity = Severity.Info)
+                |> List.exists (fun m -> m.Code = "FL0000" && m.Severity = Severity.Warning)
             @>
     finally
         File.Delete brokenConfigPath
