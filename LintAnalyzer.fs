@@ -43,17 +43,47 @@ let internal fcsCompatibilityMessages (loaded: System.Version) : Message list =
             Range = Range.range0
             Fixes = [] } ]
 
-/// Cache loaded configs by directory to avoid re-reading fsharplint.json per file.
-let internal configCache = ConcurrentDictionary<string, ConfigurationParam>()
+/// Cache loaded configs (plus any config-load diagnostics) by directory to avoid
+/// re-reading fsharplint.json per file.
+let internal configCache =
+    ConcurrentDictionary<string, ConfigurationParam * Message list>()
+
+/// Strip stack-trace frames from an exception string, keeping the type/message lines.
+let private exceptionSummary (err: string) : string =
+    err.Split('\n')
+    |> Array.takeWhile (fun line -> not (line.TrimStart().StartsWith("at ")))
+    |> Array.map (fun line -> line.Trim())
+    |> String.concat " "
+
+/// Diagnostic emitted when a discovered fsharplint.json cannot be parsed.
+let private configErrorMessage (configPath: string) (err: string) : Message =
+    { Type = "FSharpLint.ConfigError"
+      Message =
+        $"Failed to load lint configuration from {configPath}: {exceptionSummary err} "
+        + "Linting continued with FSharpLint's default configuration."
+      Code = "FL0000"
+      Severity = Severity.Warning
+      Range = Range.range0
+      Fixes = [] }
+
+/// FSharpLint's built-in default configuration, used when no fsharplint.json exists
+/// in the hierarchy or the discovered one can't be parsed.
+let private defaultConfigParam () : ConfigurationParam =
+    match Lint.getConfig ConfigurationParam.Default with
+    | Ok config -> ConfigurationParam.Configuration config
+    | Error _ -> ConfigurationParam.Default
 
 /// Walk up from filePath looking for fsharplint.json, cache parsed config per directory.
 /// Parses eagerly so lintParsedFile doesn't re-read the JSON on every file.
 /// Populates the cache for every directory along the walk path, so sibling files
 /// at deeper levels don't each re-walk up to the same root.
-let internal getConfigParam (filePath: string) : ConfigurationParam =
+/// A malformed config yields a clear FL0000 diagnostic naming the file (cached, so
+/// every file under that directory surfaces it) plus the default configuration so
+/// linting still proceeds.
+let internal getConfigParam (filePath: string) : ConfigurationParam * Message list =
     let startDir = Path.GetDirectoryName(Path.GetFullPath(filePath))
 
-    let rec walkUp (visited: string list) (d: string) : ConfigurationParam =
+    let rec walkUp (visited: string list) (d: string) : ConfigurationParam * Message list =
         match configCache.TryGetValue(d) with
         | true, cached ->
             for v in visited do
@@ -66,15 +96,13 @@ let internal getConfigParam (filePath: string) : ConfigurationParam =
             let resolved =
                 if File.Exists(candidate) then
                     match Lint.getConfig (ConfigurationParam.FromFile candidate) with
-                    | Ok config -> Some(ConfigurationParam.Configuration config)
-                    | Error _ -> Some(ConfigurationParam.FromFile candidate)
+                    | Ok config -> Some(ConfigurationParam.Configuration config, [])
+                    | Error err -> Some(defaultConfigParam (), [ configErrorMessage candidate err ])
                 else
                     let parent = Directory.GetParent(d)
 
                     if isNull parent then
-                        match Lint.getConfig ConfigurationParam.Default with
-                        | Ok config -> Some(ConfigurationParam.Configuration config)
-                        | Error _ -> Some ConfigurationParam.Default
+                        Some(defaultConfigParam (), [])
                     else
                         None
 
@@ -132,7 +160,7 @@ let internal lintAnalyzerForFcs (loadedFcs: System.Version) : Analyzer<CliContex
                 return hostIncompatible
             | [] ->
 
-                let configParam = getConfigParam context.FileName
+                let configParam, configDiagnostics = getConfigParam context.FileName
 
                 let parsedFileInfo: Lint.ParsedFileInformation =
                     { Ast = context.ParseFileResults.ParseTree
@@ -158,12 +186,14 @@ let internal lintAnalyzerForFcs (loadedFcs: System.Version) : Analyzer<CliContex
                         // lintParsedFile swallows exceptions via ReportLinterProgress(Failed);
                         // surface them so they're not silently lost.
                         return
-                            (warnings |> List.map mapWarning)
+                            configDiagnostics
+                            @ (warnings |> List.map mapWarning)
                             @ [ makeErrorMessage
                                     "FSharpLint.InternalError"
                                     $"FSharpLint internal error: {ex.GetType().Name}: {ex.Message}" ]
-                    | None -> return warnings |> List.map mapWarning
-                | LintResult.Failure failure -> return [ makeErrorMessage "FSharpLint.Error" failure.Description ]
+                    | None -> return configDiagnostics @ (warnings |> List.map mapWarning)
+                | LintResult.Failure failure ->
+                    return configDiagnostics @ [ makeErrorMessage "FSharpLint.Error" failure.Description ]
         }
 
 [<CliAnalyzer("FSharpLint", "All FSharpLint rules via FSharp.Analyzers.SDK")>]
