@@ -1,13 +1,27 @@
+/// In the SharedLintState collection: lintSource type-checks scripts through a
+/// live FSharpChecker; running that in parallel with AllRulesCoverageTests'
+/// project typechecks degrades symbol resolution under coverage instrumentation
+/// and FSharpLint then silently drops type-check-gated warnings (e.g. FL0036).
+[<Xunit.Collection("SharedLintState")>]
 module FSharpLintAnalyzerShim.Tests.IntegrationTests
 
 open Xunit
 open Swensen.Unquote
+open FSharp.Compiler.CodeAnalysis
 open FSharpLint.Application
 open FSharp.Analyzers.SDK
 open FSharpLintAnalyzerShim.LintAnalyzer
 
+/// One checker for the whole module: a fresh FSharpChecker per test multiplies
+/// concurrent FCS state and cold script-options resolution for no test value.
+let private checker = FSharpChecker.Create(keepAssemblyContents = true)
+
 let private lintMessages (source: string) : Message list =
-    match Lint.lintSource Lint.OptionalLintParameters.Default source with
+    let optionalParams =
+        { Lint.OptionalLintParameters.Default with
+            Checker = Some checker }
+
+    match Lint.lintSource optionalParams source with
     | Lint.LintResult.Success warnings -> warnings |> List.map mapWarning
     | Lint.LintResult.Failure failure -> failwith $"Lint failed: {failure.Description}"
 
