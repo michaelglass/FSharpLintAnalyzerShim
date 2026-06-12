@@ -10,7 +10,9 @@ RUNNER_DLL="benchmarks/BenchmarkRunner/bin/Release/net10.0/BenchmarkRunner.dll"
 SAMPLE_CONFIG="benchmarks/SampleProject/fsharplint.json"
 SAMPLE_PROJECT="benchmarks/SampleProject/SampleProject.fsproj"
 
-FSHW_ROOT="../FsHotWatch"
+# FsHotWatch checkout used for the real-world benchmarks; defaults to a sibling
+# checkout, override with FSHW_ROOT=/path/to/FsHotWatch.
+FSHW_ROOT="${FSHW_ROOT:-../FsHotWatch}"
 FSHW_CONFIG="$FSHW_ROOT/fsharplint.json"
 FSHW_PROJECT="$FSHW_ROOT/src/FsHotWatch/FsHotWatch.fsproj"
 FSHW_SOLUTION="$FSHW_ROOT/FsHotWatch.slnx"
