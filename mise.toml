@@ -25,6 +25,7 @@ description = "Run tests with coverage"
 run = """
 dotnet test --project tests/FSharpLintAnalyzerShim.Tests \
   --coverage \
+  --coverage-settings "$PWD/coverage-settings.xml" \
   --coverage-output-format cobertura \
   --coverage-output "$PWD/coverage/FSharpLintAnalyzerShim/coverage.cobertura.xml"
 """
