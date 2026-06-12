@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.0-alpha.4 - 2026-06-12
+
 - feat: emit a single `FL0000` Warning (`FSharpLint.HostIncompatible`) naming both
   FCS versions when the analyzer host's FCS minor version differs from the line the
   shim is built against, instead of crashing with a `TypeLoadException` /
