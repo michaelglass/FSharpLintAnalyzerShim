@@ -55,11 +55,28 @@ If no config file is found, FSharpLint's built-in default configuration is used.
 
 See the [FSharpLint documentation](https://fsprojects.github.io/FSharpLint/) for config format.
 
+## Host compatibility
+
+The shim's rule engine (FSharpLint.Core) is compiled against a specific FSharp.Compiler.Service line and is **binary-coupled** to it: it consumes FCS's typed-AST surface directly, so it can only run inside an analyzer host loading the **same FCS major.minor**.
+
+| | FCS version |
+|---|---|
+| Shim is built against | **43.12.204** (see the `FSharp.Compiler.Service` pin in `FSharpLintAnalyzerShim.fsproj`) |
+| Required host FCS line | **43.12.x** |
+| `fsharp-analyzers` 0.36.0 (latest as of writing) ships | 43.10.101 |
+
+Because `fsharp-analyzers` 0.36.0 — the only published `fsharp-analyzers` release — ships FCS 43.10.101, **loading the shim directly into that host is not supported**: the FCS lines differ (43.10 vs 43.12). Hosts on the 43.12 line (e.g. a build of [fshw](https://github.com/dawedawe/fshw) pinned there) can load it.
+
+**Symptom of a mismatch:** rather than crash with a cryptic `TypeLoadException` / `MissingMethodException` deep inside linting, the shim performs a startup version check and emits a single `FL0000` **Warning** diagnostic (`FSharpLint.HostIncompatible`) naming both the version it was built against and the version the host loaded, and produces no lint results for that run. If you see that diagnostic, run the shim under an analyzer host on the FCS 43.12 line, or rebuild the shim against your host's FCS.
+
 ## Diagnostics
 
-All diagnostics use the standard FSharpLint rule codes (`FL0001` through `FL0097`). Severity is always `Warning`. Suggested fixes from FSharpLint are passed through as Analyzer SDK `Fix` records.
+All FSharpLint rule diagnostics use the standard FSharpLint rule codes (`FL0001` through `FL0097`). Severity is always `Warning`. Suggested fixes from FSharpLint are passed through as Analyzer SDK `Fix` records.
 
-If FSharpLint encounters an internal error (which it normally swallows silently), the shim surfaces it as an `FL0000` Info diagnostic.
+The shim also emits `FL0000` diagnostics for its own conditions:
+
+- **`FSharpLint.HostIncompatible`** (`Warning`) — the analyzer host loaded an FCS minor version the shim can't bind against (see [Host compatibility](#host-compatibility)).
+- **`FSharpLint.InternalError`** — FSharpLint hit an internal error it would otherwise swallow silently; the shim surfaces it instead of dropping it.
 
 ## Rule suppression
 
@@ -91,7 +108,7 @@ Omit the rule name to apply to all rules.
 
 ## Dependencies
 
-FSharpLint.Core is pulled from [michaelglass/FSharpLint](https://github.com/michaelglass/FSharpLint) (`perf/two-phase-lint-api` branch) via Paket git dependency. This branch merges [Numpsy's `fcs10` branch](https://github.com/numpsy/FSharpLint/tree/fcs10), which updated FSharpLint to FSharp.Compiler.Service 43.x -- huge thanks to [Numpsy (Richard Webb)](https://github.com/numpsy) for that work. The `perf/two-phase-lint-api` branch pins FCS to 43.10.101 for compatibility with the `fsharp-analyzers` CLI v0.36.0 and adds a two-phase lint API for analyzer integration.
+FSharpLint.Core is pulled from [michaelglass/FSharpLint](https://github.com/michaelglass/FSharpLint) (`perf/two-phase-lint-api` branch) via Paket git dependency. This branch merges [Numpsy's `fcs10` branch](https://github.com/numpsy/FSharpLint/tree/fcs10), which updated FSharpLint to FSharp.Compiler.Service 43.x -- huge thanks to [Numpsy (Richard Webb)](https://github.com/numpsy) for that work. The branch tracks the FCS 43.12 line and adds a two-phase lint API for analyzer integration. The shim pins FCS to 43.12.204; see [Host compatibility](#host-compatibility) for what that means for the analyzer host you run it under.
 
 ## Development
 
@@ -153,4 +170,4 @@ The slow CLI path is fixable upstream, not a property of FSharpLint's rules. A s
 
 ### Host compatibility note
 
-The shim binaries are built against FCS 43.12.202 to match [fshw](https://github.com/dawedawe/fshw) and other analyzer hosts on that FCS line. `fsharp-analyzers` 0.36.0 pins FCS 43.10.101, so loading the shim directly into that host raises an ABI mismatch. The in-process runner at `benchmarks/BenchmarkRunner/` exists to make the shim path measurable until the two hosts converge on a shared FCS version.
+See the [Host compatibility](#host-compatibility) section below for the exact FCS versions and the mismatch symptom. The in-process runner at `benchmarks/BenchmarkRunner/` exists to make the shim path measurable until an analyzer-host release ships the matching FCS line.

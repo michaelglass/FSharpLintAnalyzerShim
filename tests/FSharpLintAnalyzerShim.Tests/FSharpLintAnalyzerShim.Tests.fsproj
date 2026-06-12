@@ -18,6 +18,7 @@
     <ProjectReference Include="../../paket-files/github.com/michaelglass/FSharpLint/src/FSharpLint.Core/FSharpLint.Core.fsproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HostCompatibilityTests.fs" />
     <Compile Include="ConfigDiscoveryTests.fs" />
     <Compile Include="WarningMappingTests.fs" />
     <Compile Include="IntegrationTests.fs" />
