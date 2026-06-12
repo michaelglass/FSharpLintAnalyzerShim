@@ -2,6 +2,25 @@
 
 ## Unreleased
 
+- feat: emit a single `FL0000` Warning (`FSharpLint.HostIncompatible`) naming both
+  FCS versions when the analyzer host's FCS minor version differs from the line the
+  shim is built against, instead of crashing with a `TypeLoadException` /
+  `MissingMethodException` deep inside linting. `fsharp-analyzers` 0.36.0 ships FCS
+  43.10.101 while the shim is built against 43.12.204, so loading the shim directly
+  into that host surfaces this diagnostic and produces no lint results for the run;
+  run it under an analyzer host on the FCS 43.12 line. Documented in the README
+  "Host compatibility" section.
+- feat: surface a malformed `fsharplint.json` as an `FL0000` Warning
+  (`FSharpLint.ConfigError`) naming the file and the parse error, then lint with
+  FSharpLint's default configuration instead of failing the whole file with an
+  Info-severity message that buried the raw exception and never named the config.
+  The diagnostic is cached per directory.
+- fix: report internal lint failures and recovered lint exceptions as `Warning`
+  rather than `Info` so CI analyzer hosts (which suppress `Info`/`Hint`) no longer
+  silently hide a degraded or failed lint run.
+- chore: bump local tools — coverageratchet 0.15.0-alpha.8, fssemantictagger
+  0.13.0-alpha.13, fsprojlint 0.10.0-alpha.9.
+
 ## 0.3.0-alpha.3 - 2026-05-28
 
 - security: pin transitive `System.Security.Cryptography.Xml` to 10.0.8 (9.0.0 has GHSA-37gx-xxp4-5rgx, High severity) via repo-root `Directory.Build.props`.
