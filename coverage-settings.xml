@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Code-coverage settings for `dotnet test ... -\-coverage` (Microsoft Testing
+     Platform / dotnet-coverage). Scopes coverage INSTRUMENTATION to shim-owned
+     code: paket-files/ holds the vendored FSharpLint git dependency, which is
+     third-party code this repo neither owns nor tests directly. Excluding it at
+     the source level keeps the cobertura report (and the coverage ratchet) to
+     files this repo is responsible for, without changing how shim files are
+     measured. -->
+<Configuration>
+  <CodeCoverage>
+    <Sources>
+      <Exclude>
+        <Source>.*[\\/]paket-files[\\/].*</Source>
+      </Exclude>
+    </Sources>
+  </CodeCoverage>
+</Configuration>
