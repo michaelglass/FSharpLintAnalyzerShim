@@ -6,3 +6,4 @@ coverage/
 .fsdocs/
 paket-files/
 .jj/
+.claude/settings.local.json
