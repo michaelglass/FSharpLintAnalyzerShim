@@ -3,6 +3,6 @@
        (9.0.0 has GHSA-37gx-xxp4-5rgx, High severity). Pulled in transitively
        via FSharp.Compiler.Service / FSharpLint. -->
   <ItemGroup>
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.8" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.9" />
   </ItemGroup>
 </Project>
