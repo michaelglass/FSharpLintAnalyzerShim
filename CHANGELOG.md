@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Bump `FSharp.Analyzers.SDK` 0.36.0 → 0.37.2 (now ships FCS 43.12.201, on the same 43.12 line the shim is built against — **resolves the `FL0000` host-incompatibility caveat** from 0.3.0-alpha.4), `FSharp.Core` 10.1.204 → 10.1.301, `System.Security.Cryptography.Xml` 10.0.8 → 10.0.9.
+
 ## 0.3.0-alpha.4 - 2026-06-12
 
 - feat: emit a single `FL0000` Warning (`FSharpLint.HostIncompatible`) naming both
