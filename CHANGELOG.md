@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.0-alpha.6 - 2026-06-25
+
 - security: bump the **bundled** `FSharpLint.Core`'s transitive `System.Security.Cryptography.Xml` 9.0.0 → 10.0.9 (GHSA-37gx-xxp4-5rgx, High). The shim's own projects already pinned 10.0.9 via repo-root `Directory.Build.props` (alpha.3/alpha.5), but `FSharpLint.Core` — pulled as a Paket git-dependency `ProjectReference` — sits under the fork's own `Directory.Build.props`, which shadows the repo-root override (MSBuild uses the nearest `Directory.Build.props` walking up, not a merge). So the bundled copy still resolved 9.0.0 and was merely NU1903-suppressed. Fixed at source on `michaelglass/FSharpLint` `perf/two-phase-lint-api` (CPM `PackageVersion` + net10-scoped `PackageReference`, dropping the NU1903 suppression); the shim re-pins the Paket commit so the bundled `FSharpLint.Core` now resolves 10.0.9 with zero 9.0.0 in the restore graph.
 
 ## 0.3.0-alpha.5 - 2026-06-24
