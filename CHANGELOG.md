@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.3.0-alpha.7 - 2026-07-02
+
 - fix: no more `FSharpLint.InternalError` ("ProjectOptions are not available" / NRE) when the analyzer host supplies **TransparentCompiler** check results (fshw does). Root cause was in the bundled `FSharpLint.Core`'s two-phase `ProjectOptions` lazy — `FSharpProjectContext.get_ProjectOptions()` throws by design under TransparentCompiler, and rules using the library heuristics (`AsynchronousFunctionNames` & co.) force that lazy. Fixed at source on `michaelglass/FSharpLint` `perf/two-phase-lint-api` (`0901c230`: degrade to `None` so heuristics fall back to `Unlikely`); the shim re-pins the Paket commit and adds a TransparentCompiler regression test. Notably this fired on files that fall back to FSharpLint's *default* config (which enables those rules) — e.g. NuGet-injected compile items like xunit.v3's `_content/DefaultRunnerReporters.fs`, where per-file config discovery finds no repo `fsharplint.json` (thellma/intelligence AUTOMATION-49).
 
 ## 0.3.0-alpha.6 - 2026-06-25
