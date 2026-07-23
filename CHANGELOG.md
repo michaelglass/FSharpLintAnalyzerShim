@@ -4,6 +4,7 @@
 
 - chore: bump local dev-tools — coverageratchet 0.15.0-alpha.8 → 0.15.0-alpha.10, syncdocs 0.13.0-alpha.2 → 0.13.0-alpha.3, fsprojlint 0.10.0-alpha.11 → 0.10.0-alpha.13, fsdocs-tool 21.0.0 → 22.1.0.
 - deps: bump `Microsoft.Testing.Extensions.CodeCoverage` 18.8.0 → 18.9.0; forward-pin `System.Security.Cryptography.Xml` 10.0.9 → 10.0.10 via repo-root `Directory.Build.props` (10.0.9 gained new High-severity advisories: GHSA-23rf-6693-g89p, -8q5v-6pqq-x66h, -cvvh-rhrc-wg4q, -g8r8-53c2-pm3f, -mmjf-rqrv-855v). Clears the advisory on the shim's own projects; the bundled `FSharpLint.Core` git-dep still pins 10.0.9 via its own CPM (needs an upstream bump).
+- chore: adopt the RefStamp ref-stamp guard (AUTOMATION-123) via repo-root `Directory.Build.props` (`PrivateAssets="all"`; build/test-inert) to satisfy fsprojlint 0.10.0-alpha.13's "local packs are ref-stamped" check.
 
 ## 0.3.0-alpha.7 - 2026-07-02
 
