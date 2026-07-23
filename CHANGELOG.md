@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- chore: bump local dev-tools — coverageratchet 0.15.0-alpha.8 → 0.15.0-alpha.10, syncdocs 0.13.0-alpha.2 → 0.13.0-alpha.3, fsprojlint 0.10.0-alpha.11 → 0.10.0-alpha.13, fsdocs-tool 21.0.0 → 22.1.0.
+- deps: bump `Microsoft.Testing.Extensions.CodeCoverage` 18.8.0 → 18.9.0; forward-pin `System.Security.Cryptography.Xml` 10.0.9 → 10.0.10 via repo-root `Directory.Build.props` (10.0.9 gained new High-severity advisories: GHSA-23rf-6693-g89p, -8q5v-6pqq-x66h, -cvvh-rhrc-wg4q, -g8r8-53c2-pm3f, -mmjf-rqrv-855v). Clears the advisory on the shim's own projects; the bundled `FSharpLint.Core` git-dep still pins 10.0.9 via its own CPM (needs an upstream bump).
+
 ## 0.3.0-alpha.7 - 2026-07-02
 
 - fix: no more `FSharpLint.InternalError` ("ProjectOptions are not available" / NRE) when the analyzer host supplies **TransparentCompiler** check results (fshw does). Root cause was in the bundled `FSharpLint.Core`'s two-phase `ProjectOptions` lazy — `FSharpProjectContext.get_ProjectOptions()` throws by design under TransparentCompiler, and rules using the library heuristics (`AsynchronousFunctionNames` & co.) force that lazy. Fixed at source on `michaelglass/FSharpLint` `perf/two-phase-lint-api` (`0901c230`: degrade to `None` so heuristics fall back to `Unlikely`); the shim re-pins the Paket commit and adds a TransparentCompiler regression test. Notably this fired on files that fall back to FSharpLint's *default* config (which enables those rules) — e.g. NuGet-injected compile items like xunit.v3's `_content/DefaultRunnerReporters.fs`, where per-file config discovery finds no repo `fsharplint.json` (thellma/intelligence AUTOMATION-49).
