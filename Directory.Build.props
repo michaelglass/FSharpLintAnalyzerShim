@@ -10,6 +10,6 @@
   <!-- RefStamp: ref-stamp guard for local packs (satisfies fsprojlint's
        "local packs are ref-stamped" check). Build/test-inert (PrivateAssets=all). -->
   <ItemGroup>
-    <PackageReference Include="RefStamp" Version="0.1.0-alpha.1" PrivateAssets="all" />
+    <PackageReference Include="RefStamp" Version="0.1.0-alpha.2" PrivateAssets="all" />
   </ItemGroup>
 </Project>
