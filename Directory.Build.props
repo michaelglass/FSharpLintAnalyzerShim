@@ -1,8 +1,16 @@
 <Project>
-  <!-- Pin transitive System.Security.Cryptography.Xml to a patched version
-       (9.0.0 has GHSA-37gx-xxp4-5rgx, High severity). Pulled in transitively
-       via FSharp.Compiler.Service / FSharpLint. -->
+  <!-- Pin transitive System.Security.Cryptography.Xml to a patched version.
+       Pulled in transitively via FSharp.Compiler.Service / FSharpLint.
+
+       This pin has now moved twice, so record the chain: 9.0.0 was vulnerable
+       (GHSA-37gx-xxp4-5rgx, high), which is why the pin existed at all; then
+       10.0.9 itself became affected by a second round of high-severity
+       advisories whose ranges cover >=10.0.0,<=10.0.9. Patched in 10.0.10.
+
+       Bump this rather than suppressing NU1903 — the warning is doing its job.
+       Kept in step with FsHotWatch's identical pin; both consume the same
+       FCS/FSharpLint dependency graph, so they go stale together. -->
   <ItemGroup>
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.9" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.10" />
   </ItemGroup>
 </Project>
