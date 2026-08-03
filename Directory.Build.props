@@ -1,9 +1,27 @@
 <Project>
   <!-- Pin transitive System.Security.Cryptography.Xml to a patched version.
-       10.0.9 has newly-published High-severity advisories (GHSA-23rf-6693-g89p,
-       -8q5v-6pqq-x66h, -cvvh-rhrc-wg4q, -g8r8-53c2-pm3f, -mmjf-rqrv-855v);
-       10.0.10 is the patched release. Pulled in transitively via
-       FSharp.Compiler.Service / FSharpLint. -->
+       Pulled in transitively via FSharp.Compiler.Service / FSharpLint.
+
+       This pin has now moved twice, so record the chain: 9.0.0 was vulnerable
+       (GHSA-37gx-xxp4-5rgx, high), which is why the pin existed at all; then
+       10.0.9 itself became affected by a second round of high-severity
+       advisories (GHSA-23rf-6693-g89p, -8q5v-6pqq-x66h, -cvvh-rhrc-wg4q,
+       -g8r8-53c2-pm3f, -mmjf-rqrv-855v) whose ranges cover >=10.0.0,<=10.0.9.
+       Patched in 10.0.10.
+
+       Bump this rather than suppressing NU1903 — the warning is doing its job.
+       Kept in step with FsHotWatch's identical pin; both consume the same
+       FCS/FSharpLint dependency graph, so they go stale together.
+
+       NOTE this pin cannot reach the vendored FSharpLint fork under
+       paket-files/: that fork ships its own Directory.Build.props with no
+       import-of-the-file-above, so MSBuild's first-match-wins walk stops there
+       and it resolves the package through its own Directory.Packages.props.
+       Fixing that requires a push to michaelglass/FSharpLint
+       (perf/two-phase-lint-api) — or dropping the fork (AUTOMATION-214), which
+       removes the whole class: as a NuGet package rather than a vendored
+       project, FSharpLint.Core stops carrying its own build config and falls
+       back under this pin. -->
   <ItemGroup>
     <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.10" />
   </ItemGroup>
