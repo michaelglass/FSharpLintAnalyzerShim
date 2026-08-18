@@ -38,21 +38,21 @@
       "rollForward": false
     },
     "coverageratchet": {
-      "version": "0.15.0-alpha.11",
+      "version": "0.15.0-alpha.12",
       "commands": [
         "coverageratchet"
       ],
       "rollForward": false
     },
     "fssemantictagger": {
-      "version": "0.13.0-alpha.20",
+      "version": "0.14.0-alpha.4",
       "commands": [
         "fssemantictagger"
       ],
       "rollForward": false
     },
     "fsprojlint": {
-      "version": "0.10.0-alpha.14",
+      "version": "0.10.0-alpha.15",
       "commands": [
         "fsprojlint"
       ],
