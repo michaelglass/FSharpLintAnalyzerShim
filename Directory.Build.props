@@ -17,11 +17,12 @@
        paket-files/: that fork ships its own Directory.Build.props with no
        import-of-the-file-above, so MSBuild's first-match-wins walk stops there
        and it resolves the package through its own Directory.Packages.props.
-       Fixing that requires a push to michaelglass/FSharpLint
-       (perf/two-phase-lint-api) — or dropping the fork, which
-       removes the whole class: as a NuGet package rather than a vendored
-       project, FSharpLint.Core stops carrying its own build config and falls
-       back under this pin. -->
+       That was fixed by a push to michaelglass/FSharpLint
+       (perf/two-phase-lint-api): the fork's own Directory.Packages.props is on
+       10.0.10 as of fork commit 49c68e17, which paket.lock pins. Dropping the
+       fork would remove the whole class: as a NuGet package
+       rather than a vendored project, FSharpLint.Core stops carrying its own
+       build config and falls back under this pin. -->
   <ItemGroup>
     <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.10" />
   </ItemGroup>
