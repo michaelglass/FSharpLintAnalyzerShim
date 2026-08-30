@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- perf: update the bundled `FSharpLint.Core` fork to avoid building AST breadcrumbs
+  for every node in `UselessBinding` and extracting expression source for
+  non-wildcard bindings in `FavourIgnoreOverLetWild`. On the 16k-line regression
+  fixture, the two isolated hot paths fall from 138 MB to 36 MB allocated and
+  from 908 ms to 58 ms respectively; the existing whole-file lint benchmark is
+  back below its unchanged 250 ms ceiling.
+
 ## 0.3.0-alpha.8 - 2026-08-17
 
 - chore: bump local dev-tools — coverageratchet 0.15.0-alpha.8 → 0.15.0-alpha.10, syncdocs 0.13.0-alpha.2 → 0.13.0-alpha.3, fsprojlint 0.10.0-alpha.11 → 0.10.0-alpha.13, fsdocs-tool 21.0.0 → 22.1.0.

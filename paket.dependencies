@@ -9,8 +9,10 @@ nuget FSharp.Analyzers.SDK 0.36.0
 // results come from FCS's TransparentCompiler — the shim's host, fshw, uses it).
 // Upstream master ALREADY has everything else the shim needs: the two-phase
 // `lintParsedFile` API (byte-identical) and FCS 43.12. This branch is now synced
-// with upstream master (perf/rule fixes pulled in) + our guard + crypto.xml 10.0.10.
+// with upstream master (perf/rule fixes pulled in) + our guard, and avoids eager
+// breadcrumb/source extraction in UselessBinding and
+// FavourIgnoreOverLetWild for large analyzer-host files.
 // WAITING FOR fsprojects/FSharpLint#872 (Numpsy's project-context wrapper — the
 // maintainer's preferred fix over our #862/#863). Once #872 (or #862/#863) lands in
 // an upstream nightly, drop this git-dep and switch to upstream FSharpLint.Core.
-git https://github.com/michaelglass/FSharpLint.git perf/two-phase-lint-api
+git https://github.com/michaelglass/FSharpLint.git perf/share-solution-state
