@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.4.0-alpha.1 - 2026-08-30
+
 - perf: update the bundled `FSharpLint.Core` fork to avoid building AST breadcrumbs
   for every node in `UselessBinding` and extracting expression source for
   non-wildcard bindings in `FavourIgnoreOverLetWild`. On the 16k-line regression
