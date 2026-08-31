@@ -20,6 +20,7 @@
   <ItemGroup>
     <Compile Include="SharedLintStateCollection.fs" />
     <Compile Include="HostCompatibilityTests.fs" />
+    <Compile Include="CoverageConfigurationTests.fs" />
     <Compile Include="ConfigDiscoveryTests.fs" />
     <Compile Include="WarningMappingTests.fs" />
     <Compile Include="IntegrationTests.fs" />
