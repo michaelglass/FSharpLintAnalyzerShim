@@ -81,8 +81,8 @@ let ``fsharplint:enable re-enables a previously disabled rule`` () =
 /// bare `do ()` — as a compile item into consuming test projects. With the Xunit types
 /// RESOLVED (project context, not a bare script), FSharpLint threw an internal
 /// NullReferenceException, which the shim surfaces as FSharpLint.InternalError and CI
-/// gates then fail repo-wide (thellma/intelligence). Lint must complete
-/// without an internal error on this file shape.
+/// gates then fail repo-wide. Lint must complete without an internal error on this
+/// file shape.
 [<Fact>]
 let ``module with only assembly attributes and bare do lints without internal error`` () =
     // The exact auto-generated content xunit.v3.core 3.2.x injects (abbreviated to two
