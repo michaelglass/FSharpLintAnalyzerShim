@@ -19,3 +19,8 @@ jobs:
       fantomas-paths: 'LintAnalyzer.fs tests/'
       check-docs: false
       paket-restore: true
+
+  lint-project:
+    uses: michaelglass/MichaelsWackyFsPackageTools/.github/workflows/michaels-wacky-lint-project.yml@main
+    permissions:
+      contents: read
