@@ -20,9 +20,9 @@
        That was fixed by a push to michaelglass/FSharpLint
        (perf/two-phase-lint-api): the fork's own Directory.Packages.props is on
        10.0.10 as of fork commit 49c68e17, which paket.lock pins. Dropping the
-       fork (AUTOMATION-230) would remove the whole class: as a NuGet package
-       rather than a vendored project, FSharpLint.Core stops carrying its own
-       build config and falls back under this pin. -->
+       fork would remove the whole class: as a NuGet package rather than a
+       vendored project, FSharpLint.Core stops carrying its own build config and
+       falls back under this pin. -->
   <ItemGroup>
     <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.10" />
   </ItemGroup>
