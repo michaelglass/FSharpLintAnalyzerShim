@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <NoWarn>$(NoWarn);NU1608</NoWarn>
 
     <!-- Package metadata -->
     <PackageId>FSharpLintAnalyzerShim</PackageId>
@@ -26,12 +25,10 @@
     <Compile Include="LintAnalyzer.fs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FSharp.Analyzers.SDK" Version="0.37.2" />
-    <!-- Override the SDK's FCS pin (43.12.201) up to match FSharpLint.Core (43.12)
-         and typical analyzer hosts (fshw pins 43.12.202). Required for binary compat
-         with the host's AST types; SDK itself only touches stable surface. -->
-    <PackageReference Include="FSharp.Compiler.Service" Version="43.12.204" />
-    <PackageReference Update="FSharp.Core" Version="10.1.301" />
+    <PackageReference Include="FSharp.Analyzers.SDK" Version="0.39.0" />
+    <!-- Match the SDK host cohort; analyzer loading checks the SDK minor version. -->
+    <PackageReference Include="FSharp.Compiler.Service" Version="43.12.400" />
+    <PackageReference Update="FSharp.Core" Version="10.1.400" />
   </ItemGroup>
   <ItemGroup>
     <!-- PrivateAssets=all: bundle into nupkg instead of creating a NuGet dep
