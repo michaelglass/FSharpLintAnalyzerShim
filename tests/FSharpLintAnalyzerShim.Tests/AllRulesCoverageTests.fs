@@ -230,7 +230,10 @@ let ``lintAnalyzer [<CliAnalyzer>] entry point returns mapped warnings for a fil
 [<Fact>]
 let ``SDK loader registers the shim and runs its real naming diagnostic`` () =
     let context = buildCliContext (Path.Combine(rulesDir, "Naming.fs"))
-    let directory = Path.Combine(Path.GetTempPath(), "shim-sdk-loader-" + System.Guid.NewGuid().ToString("N"))
+
+    let directory =
+        Path.Combine(Path.GetTempPath(), "shim-sdk-loader-" + System.Guid.NewGuid().ToString("N"))
+
     Directory.CreateDirectory directory |> ignore
 
     try
@@ -245,7 +248,13 @@ let ``SDK loader registers the shim and runs its real naming diagnostic`` () =
         test <@ loaded.AnalyzerNames = [ "FSharpLint" ] @>
 
         let messages = client.RunAnalyzers context |> Async.RunSynchronously
-        test <@ messages |> List.exists (fun message -> message.Name = "FSharpLint" && message.Message.Code = "FL0036") @>
+
+        test
+            <@
+                messages
+                |> List.exists (fun message -> message.Name = "FSharpLint" && message.Message.Code = "FL0036")
+            @>
+
         test <@ messages |> List.forall (fun message -> message.Message.Code <> "FL0000") @>
     finally
         Directory.Delete(directory, true)
