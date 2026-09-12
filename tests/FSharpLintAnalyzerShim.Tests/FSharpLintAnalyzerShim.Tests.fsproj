@@ -14,7 +14,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../../FSharpLintAnalyzerShim.fsproj" />
-    <ProjectReference Include="../../paket-files/localfilesystem/fsharplint-security/src/FSharpLint.Core/FSharpLint.Core.fsproj" />
+    <ProjectReference Include="../../paket-files/localfilesystem/fsharplint-security/src/FSharpLint.Core/FSharpLint.Core.fsproj" AdditionalProperties="EnableSourceControlManagerQueries=false;EnableSourceLink=false" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SharedLintStateCollection.fs" />
