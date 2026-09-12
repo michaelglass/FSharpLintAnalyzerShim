@@ -15,4 +15,4 @@ nuget FSharp.Analyzers.SDK 0.36.0
 // WAITING FOR fsprojects/FSharpLint#872 (Numpsy's project-context wrapper — the
 // maintainer's preferred fix over our #862/#863). Once #872 (or #862/#863) lands in
 // an upstream nightly, drop this git-dep and switch to upstream FSharpLint.Core.
-git https://github.com/michaelglass/FSharpLint.git perf/share-solution-state
+git file:///private/tmp/fsharplint-security 8411d3ec31a623ea5d52e41103e9fa6d22629298
