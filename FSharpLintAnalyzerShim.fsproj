@@ -34,7 +34,7 @@
     <!-- PrivateAssets=all: bundle into nupkg instead of creating a NuGet dep
          (FSharpLint.Core isn't published to NuGet). Test project must add its
          own ProjectReference to FSharpLint.Core since this won't flow. -->
-    <ProjectReference Include="paket-files/github.com/michaelglass/FSharpLint/src/FSharpLint.Core/FSharpLint.Core.fsproj"
+    <ProjectReference Include="paket-files/localfilesystem/a564-fsharplint-security/src/FSharpLint.Core/FSharpLint.Core.fsproj"
                       PrivateAssets="all" />
   </ItemGroup>
 
