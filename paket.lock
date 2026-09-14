@@ -30,5 +30,5 @@ NUGET
       System.Collections.Immutable (>= 10.0.10) - restriction: || (&& (< net10.0) (>= net9.0)) (>= net462) (&& (>= net8.0) (< net9.0)) (&& (< net8.0) (>= netstandard2.0))
     System.Runtime.CompilerServices.Unsafe (6.1.2) - restriction: >= net8.0
 GIT
-  remote: file:////private/tmp/a564-fsharplint-security
+  remote: https://github.com/michaelglass/FSharpLint.git
      (8411d3ec31a623ea5d52e41103e9fa6d22629298)
