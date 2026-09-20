@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.4.0-alpha.2 - 2026-09-20
+
 - fix(security): the bundled FSharpLint fork now builds with `Microsoft.SourceLink.GitHub`
   10.0.303 (was 8.0.0), which uses the patched `Microsoft.Build.Tasks.Git` for
   CVE-2026-62900 (GHSA-23fw-v26w-5fgq). The fork is consumed from its remote branch rather
