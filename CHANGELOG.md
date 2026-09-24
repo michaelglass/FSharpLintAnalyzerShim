@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- chore: bump local dev-tool fssemantictagger 0.14.0-alpha.4 → 0.14.0-alpha.12. The release tagger now reads a `feat!:` / `BREAKING CHANGE:` entry in `## Unreleased` as a floor the API diff cannot lower, so a declared breaking change can no longer ship as a patch or minor.
+
 ## 0.4.0-alpha.2 - 2026-09-20
 
 - fix(security): the bundled FSharpLint fork now builds with `Microsoft.SourceLink.GitHub`
