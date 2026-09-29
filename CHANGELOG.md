@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- chore: bump local dev-tool coverageratchet 0.15.0-alpha.19 → 0.15.0-alpha.20. `coverageratchet loosen` (`mise run coverage-loosen`) now lowers only the floors of files that fail, and only the failing number; it no longer tightens or removes a passing file's override.
 - chore: bump local dev-tool coverageratchet 0.15.0-alpha.12 → 0.15.0-alpha.19. The coverage reader now measures every `.fs`/`.cs`/`.vb` source and recognises test code by directory rather than by a "Test" file name.
 
 ## 0.5.0-alpha.1 - 2026-09-29
