@@ -34,7 +34,7 @@ mise run fmt:check
 
 - .NET 10 SDK (managed via mise)
 - **Paket** for dependency management — run `paket install` after cloning
-- FSharpLint.Core is pulled via Paket git dependency from `michaelglass/FSharpLint` (`perf/two-phase-lint-api` branch) into `paket-files/`
+- FSharpLint.Core is pulled via Paket git dependency from `michaelglass/FSharpLint` (`fix/sourcelink-security-20260912` branch, commit `019da3dc` pinned in `paket.lock`) into `paket-files/`
 - Tests use xunit v3 + Unquote
 
 ## Architecture

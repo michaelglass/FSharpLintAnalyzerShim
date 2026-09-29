@@ -4,15 +4,17 @@ storage: none
 
 nuget FSharp.Analyzers.SDK 0.36.0
 
-// Vendored fork of FSharpLint. Kept ONLY for a TransparentCompiler `ProjectOptions`
-// guard (try/with -> None; upstream Lint.fs is unguarded and throws when check
-// results come from FCS's TransparentCompiler — the shim's host, fshw, uses it).
-// Upstream master ALREADY has everything else the shim needs: the two-phase
-// `lintParsedFile` API (byte-identical) and FCS 43.12. This branch is now synced
-// with upstream master (perf/rule fixes pulled in) + our guard, and avoids eager
-// breadcrumb/source extraction in UselessBinding and
-// FavourIgnoreOverLetWild for large analyzer-host files.
-// WAITING FOR fsprojects/FSharpLint#872 (Numpsy's project-context wrapper — the
-// maintainer's preferred fix over our #862/#863). Once #872 (or #862/#863) lands in
-// an upstream nightly, drop this git-dep and switch to upstream FSharpLint.Core.
+// Vendored fork of FSharpLint (branch fix/sourcelink-security-20260912, commit
+// 019da3dc in paket.lock): upstream v0.27.0 plus
+//  - a TransparentCompiler guard: FSharpProjectContext.ProjectOptions throws when
+//    check results come from FCS's TransparentCompiler (the shim's host uses it),
+//    so the fork degrades it to None instead of failing the file; upstream Lint.fs
+//    is unguarded;
+//  - build-time security fixes: Microsoft.SourceLink.GitHub 10.0.303 (patched
+//    Microsoft.Build.Tasks.Git, CVE-2026-62900) and NuGet.Protocol 6.12.5 in the
+//    build script (GHSA-g4vj-cjjj-v7hg);
+//  - FCS 43.12.202 / FSharp.Core 10.1.202 pins, and lazy breadcrumb/source
+//    extraction in UselessBinding and FavourIgnoreOverLetWild for large files.
+// Waiting on fsprojects/FSharpLint#872 (project-context wrapper). Once it ships in an
+// upstream release or nightly, drop this git-dep and use upstream FSharpLint.Core.
 git https://github.com/michaelglass/FSharpLint.git fix/sourcelink-security-20260912

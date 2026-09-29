@@ -17,9 +17,9 @@
        paket-files/: that fork ships its own Directory.Build.props with no
        import-of-the-file-above, so MSBuild's first-match-wins walk stops there
        and it resolves the package through its own Directory.Packages.props.
-       That was fixed by a push to michaelglass/FSharpLint
-       (perf/two-phase-lint-api): the fork's own Directory.Packages.props is on
-       10.0.10 as of fork commit 49c68e17, which paket.lock pins. Dropping the
+       The fork therefore pins the package itself: its Directory.Packages.props
+       is on 10.0.10 on branch fix/sourcelink-security-20260912 (commit
+       019da3dc, which paket.lock pins), with no NU1903 suppression. Dropping the
        fork would remove the whole class: as a NuGet package rather than a
        vendored project, FSharpLint.Core stops carrying its own build config and
        falls back under this pin. -->

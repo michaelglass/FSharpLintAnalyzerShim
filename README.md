@@ -123,7 +123,9 @@ mise run test     # tests only
 ## Dependencies
 
 FSharpLint.Core is pulled from [michaelglass/FSharpLint](https://github.com/michaelglass/FSharpLint)
-(`perf/two-phase-lint-api` branch) via a Paket git dependency. That branch merges
+(`fix/sourcelink-security-20260912` branch; `paket.lock` pins commit `019da3dc`) via a
+Paket git dependency. That branch is upstream FSharpLint v0.27.0 plus a TransparentCompiler
+guard on `ProjectOptions` and patched build and transitive dependencies. It merges
 [Numpsy's `fcs10` branch](https://github.com/numpsy/FSharpLint/tree/fcs10), which
 updated FSharpLint to FSharp.Compiler.Service 43.x — huge thanks to
 [Numpsy (Richard Webb)](https://github.com/numpsy) for that work. It tracks the FCS

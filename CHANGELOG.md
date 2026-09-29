@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+- fix(security): the bundled `FSharpLint.Core`'s `System.Security.Cryptography.Xml` goes
+  9.0.0 → 10.0.10 (GHSA-37gx-xxp4-5rgx, High). The fork now pins the patched version itself
+  instead of suppressing NU1903.
+- chore: the bundled `FSharpLint.Core` fork is now based on upstream FSharpLint v0.27.0, which
+  fixes a hint false positive on interpolated strings without `sprintf`.
 - chore: bump local dev-tool fssemantictagger 0.14.0-alpha.4 → 0.14.0-alpha.12. The release tagger now reads a `feat!:` / `BREAKING CHANGE:` entry in `## Unreleased` as a floor the API diff cannot lower, so a declared breaking change can no longer ship as a patch or minor.
 
 ## 0.4.0-alpha.2 - 2026-09-20
