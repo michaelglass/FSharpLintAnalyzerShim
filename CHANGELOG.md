@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.5.0-alpha.1 - 2026-09-29
+
 - fix(security): the bundled `FSharpLint.Core`'s `System.Security.Cryptography.Xml` goes
   9.0.0 → 10.0.10 (GHSA-37gx-xxp4-5rgx, High). The fork now pins the patched version itself
   instead of suppressing NU1903.
