@@ -3,7 +3,7 @@
     "LintAnalyzer.fs": [
       {
         "line": 92,
-        "branch": 88,
+        "branch": 90,
         "reason": "settled to actual macOS-local coverage (CI is linux-only)",
         "platform": "macos"
       },

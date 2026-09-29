@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- chore: bump local dev-tool coverageratchet 0.15.0-alpha.12 → 0.15.0-alpha.19. The coverage reader now measures every `.fs`/`.cs`/`.vb` source and recognises test code by directory rather than by a "Test" file name.
+
 ## 0.5.0-alpha.1 - 2026-09-29
 
 - fix(security): the bundled `FSharpLint.Core`'s `System.Security.Cryptography.Xml` goes
