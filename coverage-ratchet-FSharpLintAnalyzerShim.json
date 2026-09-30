@@ -2,8 +2,8 @@
   "overrides": {
     "LintAnalyzer.fs": [
       {
-        "line": 92,
-        "branch": 90,
+        "line": 99,
+        "branch": 96,
         "reason": "settled to actual macOS-local coverage (CI is linux-only)",
         "platform": "macos"
       },

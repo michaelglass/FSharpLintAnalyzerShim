@@ -331,3 +331,54 @@ let ``malformed fsharplint.json surfaces an immediate diagnostic naming the file
     finally
         configCache.Clear()
         Directory.Delete(tempDir, true)
+
+[<Fact>]
+let ``internal FSharpLint exception surfaces as an InternalError warning alongside other diagnostics`` () =
+    let tempDir = Path.Combine(Path.GetTempPath(), System.Guid.NewGuid().ToString("N"))
+
+    Directory.CreateDirectory(tempDir) |> ignore
+
+    try
+        // A malformed config contributes a diagnostic that must survive the lint failure.
+        let configPath = Path.Combine(tempDir, "fsharplint.json")
+        File.WriteAllText(configPath, "{ this is not valid json ")
+
+        let sourceFile = Path.Combine(tempDir, "Probe.fs")
+
+        File.WriteAllText(
+            sourceFile,
+            "module Probe\n\ntype iMyInterface =\n    abstract member DoStuff: unit -> unit\n"
+        )
+
+        configCache.Clear()
+
+        // A host handing over source text that is out of sync with the parse tree (here:
+        // empty) makes FSharpLint's rules index past the end of the line array. lint
+        // catches that and reports it only through ReportLinterProgress(Failed), still
+        // returning LintResult.Success.
+        let ctx =
+            { buildCliContext sourceFile with
+                SourceText = SourceText.ofString "" }
+
+        let messages = lintAnalyzer ctx |> Async.RunSynchronously
+
+        let internalErrors =
+            messages |> List.filter (fun m -> m.Type = "FSharpLint.InternalError")
+
+        match internalErrors with
+        | [ internalError ] ->
+            test <@ internalError.Code = "FL0000" @>
+            test <@ internalError.Severity = Severity.Warning @>
+            test <@ internalError.Range = Range.range0 @>
+            // "FSharpLint internal error: <ExceptionTypeName>: <message>"
+            test <@ internalError.Message.StartsWith("FSharpLint internal error: ") @>
+            test <@ internalError.Message.Contains("Exception: ") @>
+        | other -> failwith $"expected exactly one FSharpLint.InternalError, got %A{other}"
+
+        // The config diagnostic is still returned, ahead of the internal error.
+        test <@ messages |> List.map (fun m -> m.Type) = [ "FSharpLint.ConfigError"; "FSharpLint.InternalError" ] @>
+
+        test <@ messages.Head.Message.Contains(configPath) @>
+    finally
+        configCache.Clear()
+        Directory.Delete(tempDir, true)
