@@ -2,7 +2,8 @@
 
 ## Unreleased
 
-- deps: build tooling fssemantictagger 0.14.0-alpha.20, fsprojlint 0.10.0-alpha.20, RefStamp 0.1.0-alpha.4 (syncdocs stays at 0.13.0-alpha.4: alpha.8 fails CI on a repo without a docs target).
+- docs: add `docs/index.md`, kept in step with the README by SyncDocs (the intro, build and run, configuration and suppression, and development sections), plus links to the other docs pages. With a docs target in place, the local tool syncdocs goes 0.13.0-alpha.4 → 0.13.0-alpha.8, whose `check` requires one.
+- deps: build tooling fssemantictagger 0.14.0-alpha.20, fsprojlint 0.10.0-alpha.20, RefStamp 0.1.0-alpha.4.
 - chore: bump local dev-tool coverageratchet 0.15.0-alpha.19 → 0.15.0-alpha.20. `coverageratchet loosen` (`mise run coverage-loosen`) now lowers only the floors of files that fail, and only the failing number; it no longer tightens or removes a passing file's override.
 - chore: bump local dev-tool coverageratchet 0.15.0-alpha.12 → 0.15.0-alpha.19. The coverage reader now measures every `.fs`/`.cs`/`.vb` source and recognises test code by directory rather than by a "Test" file name.
 

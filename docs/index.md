@@ -1,4 +1,4 @@
-<!-- sync:intro:start -->
+<!-- sync:intro -->
 # FSharpLintAnalyzerShim
 
 A thin adapter that aims to expose all 97 [FSharpLint](https://github.com/fsprojects/FSharpLint)
@@ -25,19 +25,7 @@ All rule logic lives in FSharpLint.Core; this project contains no rules of its o
 4. Maps each `LintWarning` to an Analyzer SDK `Message`.
 <!-- sync:intro:end -->
 
-## Quick start
-
-### Prerequisites
-
-- .NET 10 SDK
-- `fsharp-analyzers` CLI: `dotnet tool install -g fsharp-analyzers`
-- [Paket](https://fsprojects.github.io/Paket/): `dotnet tool install -g paket`
-
-> **Heads-up:** the published `fsharp-analyzers` 0.36.0 ships an FCS version this shim
-> can't bind against, so you currently need an analyzer host on the FCS 43.12 line to
-> run it. See [Host compatibility](docs/host-compatibility.md).
-
-<!-- sync:build-and-run:start -->
+<!-- sync:build-and-run -->
 ### Build
 
 ```bash
@@ -63,7 +51,7 @@ fsharp-analyzers \
 ```
 <!-- sync:build-and-run:end -->
 
-<!-- sync:configuration:start -->
+<!-- sync:configuration -->
 ## Configuration
 
 Place a `fsharplint.json` anywhere in the file's directory hierarchy. The shim walks up
@@ -102,23 +90,7 @@ Omit the rule name to apply to all rules.
 rule.
 <!-- sync:configuration:end -->
 
-## Diagnostics
-
-FSharpLint rule diagnostics use the standard FSharpLint rule codes (`FL0001` through
-`FL0097`), always at `Warning` severity. Suggested fixes are passed through as Analyzer
-SDK `Fix` records.
-
-The shim also emits its own `FL0000` diagnostics (all `Warning`, since CI hosts suppress
-`Info`/`Hint`):
-
-| Type | Meaning |
-|---|---|
-| `FSharpLint.HostIncompatible` | The host loaded an FCS minor version the shim can't bind against. See [Host compatibility](docs/host-compatibility.md). |
-| `FSharpLint.ConfigError` | A discovered `fsharplint.json` couldn't be parsed; names the file and error, then lints with the default config. |
-| `FSharpLint.InternalError` | FSharpLint hit an internal error it would otherwise swallow; the shim surfaces it. |
-| `FSharpLint.Error` | FSharpLint reported a lint failure for the file (its description is passed through). |
-
-<!-- sync:development:start -->
+<!-- sync:development -->
 ## Development
 
 ```bash
@@ -128,21 +100,8 @@ mise run test     # tests only
 ```
 <!-- sync:development:end -->
 
-## Dependencies
-
-FSharpLint.Core is pulled from [michaelglass/FSharpLint](https://github.com/michaelglass/FSharpLint)
-(`fix/sourcelink-security-20260912` branch; `paket.lock` pins commit `019da3dc`) via a
-Paket git dependency. That branch is upstream FSharpLint v0.27.0 plus a TransparentCompiler
-guard on `ProjectOptions` and patched build and transitive dependencies. It merges
-[Numpsy's `fcs10` branch](https://github.com/numpsy/FSharpLint/tree/fcs10), which
-updated FSharpLint to FSharp.Compiler.Service 43.x — huge thanks to
-[Numpsy (Richard Webb)](https://github.com/numpsy) for that work. It tracks the FCS
-43.12 line and adds a two-phase lint API for analyzer integration. The shim pins FCS to
-43.12.204; see [Host compatibility](docs/host-compatibility.md) for what that means for
-the host you run it under.
-
 ## More
 
-- [Host compatibility](docs/host-compatibility.md) — FCS binary coupling and the mismatch symptom.
-- [Rule coverage](docs/rule-coverage.md) — which rules the test suite exercises, and the test layout.
-- [Benchmarks](docs/benchmarks.md) — shim vs. the FSharpLint CLI on single projects and nested solutions.
+- [Host compatibility](host-compatibility.md) — FCS binary coupling, the mismatch symptom, and which analyzer hosts can load the shim.
+- [Rule coverage](rule-coverage.md) — which rules the test suite exercises, and the test layout.
+- [Benchmarks](benchmarks.md) — shim vs. the FSharpLint CLI on single projects and nested solutions.
