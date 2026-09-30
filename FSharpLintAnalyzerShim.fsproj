@@ -2,6 +2,8 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 
     <!-- Package metadata -->
     <PackageId>FSharpLintAnalyzerShim</PackageId>
@@ -29,6 +31,7 @@
     <!-- Match the SDK host cohort; analyzer loading checks the SDK minor version. -->
     <PackageReference Include="FSharp.Compiler.Service" Version="43.12.400" />
     <PackageReference Update="FSharp.Core" Version="10.1.400" />
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.303" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
     <!-- PrivateAssets=all: bundle into nupkg instead of creating a NuGet dep
@@ -42,6 +45,9 @@
        Analyzer DLLs are loaded by the host via reflection — all runtime deps
        must be co-located. We bundle everything except DLLs the analyzer host
        already provides (FSharp.Analyzers.SDK, FSharp.Compiler.Service, FSharp.Core).
+       Only portable lib assets go in: a RID-specific copy (runtimes/<rid>/…, which
+       carries a DestinationSubDirectory) would land on the same lib/ path as the
+       portable one and collide (NU5118).
        We also suppress FSharpLint.Core from appearing as a NuGet dependency
        (it's not published to NuGet — it comes from a Paket git dep). -->
   <PropertyGroup>
@@ -55,7 +61,8 @@
                                        AND !$([System.String]::new('%(Filename)').StartsWith('FSharp.Core'))
                                        AND !$([System.String]::new('%(Filename)').StartsWith('FSharp.DependencyManager'))
                                        AND !$([System.String]::new('%(Filename)').StartsWith('McMaster'))
-                                       AND '%(Extension)' == '.dll'" />
+                                       AND '%(Extension)' == '.dll'
+                                       AND '%(ReferenceCopyLocalPaths.DestinationSubDirectory)' == ''" />
     </ItemGroup>
   </Target>
 </Project>

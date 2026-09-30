@@ -1,4 +1,9 @@
 <Project>
+  <PropertyGroup>
+    <!-- Disable SourceLink when no .git directory exists (jj without colocated git) -->
+    <EnableSourceLink Condition="!Exists('$(MSBuildThisFileDirectory).git')">false</EnableSourceLink>
+    <EnableSourceControlManagerQueries Condition="!Exists('$(MSBuildThisFileDirectory).git')">false</EnableSourceControlManagerQueries>
+  </PropertyGroup>
   <!-- Pin transitive System.Security.Cryptography.Xml to a patched version.
        Pulled in transitively via FSharp.Compiler.Service / FSharpLint.
 

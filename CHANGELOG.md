@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- fix: the package project now builds with `TreatWarningsAsErrors` and `GenerateDocumentationFile`, and references `Microsoft.SourceLink.GitHub` 10.0.303, so the published package links its symbols to the source on GitHub. The package's bundled dependencies now leave out runtime-specific (`runtimes/<rid>/…`) copies explicitly. NuGet already dropped the one such copy, a Windows build of `System.Security.Cryptography.Pkcs`, with warning NU5118, so the package contents are unchanged.
+- deps: build tooling fsprojlint 0.10.0-alpha.20 → 0.10.0-alpha.21 (it now lints the root package project) and fssemantictagger 0.14.0-alpha.20 → 0.14.0-alpha.22.
 - docs: add `docs/index.md`, kept in step with the README by SyncDocs (the intro, build and run, configuration and suppression, and development sections), plus links to the other docs pages. With a docs target in place, the local tool syncdocs goes 0.13.0-alpha.4 → 0.13.0-alpha.8, whose `check` requires one.
 - deps: build tooling fssemantictagger 0.14.0-alpha.20, fsprojlint 0.10.0-alpha.20, RefStamp 0.1.0-alpha.4.
 - chore: bump local dev-tool coverageratchet 0.15.0-alpha.19 → 0.15.0-alpha.20. `coverageratchet loosen` (`mise run coverage-loosen`) now lowers only the floors of files that fail, and only the failing number; it no longer tightens or removes a passing file's override.
