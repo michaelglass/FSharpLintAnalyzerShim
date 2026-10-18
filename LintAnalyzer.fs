@@ -73,48 +73,105 @@ let private defaultConfigParam () : ConfigurationParam =
     | Ok config -> ConfigurationParam.Configuration config
     | Error _ -> ConfigurationParam.Default
 
+/// For each cached directory whose config came from an fsharplint.json: that file's
+/// path and the exact text the cached config was parsed from. A host such as a
+/// long-lived analyzer daemon outlives edits to the file, so a cache hit is only
+/// served while the file still holds that text; otherwise every directory parsed
+/// from it is evicted and re-resolved. Directories with no origin (no config in the
+/// hierarchy) are served as cached.
+let internal configOrigins = ConcurrentDictionary<string, string * string>()
+
+/// The fsharplint.json `dir`'s cached config was parsed from, when that file has since
+/// changed or disappeared.
+let private staleOrigin (dir: string) : string option =
+    match configOrigins.TryGetValue dir with
+    | true, (configPath, parsedText) when not (File.Exists configPath) || File.ReadAllText configPath <> parsedText ->
+        Some configPath
+    | _ -> None
+
+/// Drop every cached directory whose config was parsed from `configPath`.
+let private evict (configPath: string) =
+    for KeyValue(dir, (origin, _)) in configOrigins do
+        if origin = configPath then
+            configCache.TryRemove dir |> ignore
+            configOrigins.TryRemove dir |> ignore
+
 /// Walk up from filePath looking for fsharplint.json, cache parsed config per directory.
 /// Parses eagerly so lintParsedFile doesn't re-read the JSON on every file.
 /// Populates the cache for every directory along the walk path, so sibling files
 /// at deeper levels don't each re-walk up to the same root.
 /// A malformed config yields a clear FL0000 diagnostic naming the file (cached, so
 /// every file under that directory surfaces it) plus the default configuration so
-/// linting still proceeds.
+/// linting still proceeds. A cached config whose fsharplint.json has been edited
+/// since it was parsed is re-parsed (see `configOrigins`).
 let internal getConfigParam (filePath: string) : ConfigurationParam * Message list =
     let startDir = Path.GetDirectoryName(Path.GetFullPath(filePath))
 
     let rec walkUp (visited: string list) (d: string) : ConfigurationParam * Message list =
-        match configCache.TryGetValue(d) with
-        | true, cached ->
+        match configCache.TryGetValue(d), staleOrigin d with
+        | (true, _), Some configPath ->
+            evict configPath
+            walkUp visited d
+        | (true, cached), None ->
+            let origin =
+                match configOrigins.TryGetValue d with
+                | true, o -> Some o
+                | false, _ -> None
+
             for v in visited do
                 configCache.TryAdd(v, cached) |> ignore
+                origin |> Option.iter (fun o -> configOrigins.[v] <- o)
 
             cached
-        | false, _ ->
+        | (false, _), _ ->
             let candidate = Path.Combine(d, "fsharplint.json")
 
             let resolved =
                 if File.Exists(candidate) then
+                    // Read BEFORE parsing: an edit landing between the two leaves an
+                    // origin older than the parsed config, which the next lookup sees as
+                    // stale and re-parses — one extra parse, never a stale config served.
+                    let text = File.ReadAllText candidate
+
                     match Lint.getConfig (ConfigurationParam.FromFile candidate) with
-                    | Ok config -> Some(ConfigurationParam.Configuration config, [])
-                    | Error err -> Some(defaultConfigParam (), [ configErrorMessage candidate err ])
+                    | Ok config -> Some(Some(candidate, text), (ConfigurationParam.Configuration config, []))
+                    | Error err ->
+                        Some(Some(candidate, text), (defaultConfigParam (), [ configErrorMessage candidate err ]))
                 else
                     let parent = Directory.GetParent(d)
 
                     if isNull parent then
-                        Some(defaultConfigParam (), [])
+                        Some(None, (defaultConfigParam (), []))
                     else
                         None
 
             match resolved with
-            | Some r ->
+            | Some(origin, r) ->
                 for v in d :: visited do
-                    configCache.TryAdd(v, r) |> ignore
+                    configCache.[v] <- r
+                    origin |> Option.iter (fun o -> configOrigins.[v] <- o)
 
                 r
             | None -> walkUp (d :: visited) (Directory.GetParent(d).FullName)
 
     walkUp [] startDir
+
+/// True when the config's `ignoreFiles` excludes `filePath`, decided by FSharpLint's
+/// own matcher. FSharpLint applies `ignoreFiles` only when it enumerates a project
+/// itself; `lintParsedFile`, which this shim calls per file, never consults it.
+let internal isIgnoredFile (configParam: ConfigurationParam) (filePath: string) : bool =
+    match configParam with
+    | ConfigurationParam.Configuration config ->
+        match config.ignoreFiles with
+        | Some globs ->
+            let parsed =
+                globs
+                |> Array.map FSharpLint.Framework.Configuration.IgnoreFiles.parseIgnorePath
+                |> Array.toList
+
+            FSharpLint.Framework.Configuration.IgnoreFiles.shouldFileBeIgnored parsed (Path.GetFullPath filePath)
+        | None -> false
+    | _ -> false
 
 /// Map a FSharpLint SuggestedFix to an Analyzer SDK Fix.
 let internal mapFix (suggestedFix: SuggestedFix) : Fix =
@@ -166,38 +223,42 @@ let internal lintAnalyzerForFcs (loadedFcs: System.Version) : Analyzer<CliContex
 
                 let configParam, configDiagnostics = getConfigParam context.FileName
 
-                let parsedFileInfo: Lint.ParsedFileInformation =
-                    { Ast = context.ParseFileResults.ParseTree
-                      Source = context.SourceText.ToString()
-                      TypeCheckResults = Some context.CheckFileResults
-                      ProjectCheckResults = Some context.CheckProjectResults }
+                if isIgnoredFile configParam context.FileName then
+                    return configDiagnostics
+                else
 
-                let mutable lintException: exn option = None
+                    let parsedFileInfo: Lint.ParsedFileInformation =
+                        { Ast = context.ParseFileResults.ParseTree
+                          Source = context.SourceText.ToString()
+                          TypeCheckResults = Some context.CheckFileResults
+                          ProjectCheckResults = Some context.CheckProjectResults }
 
-                let optionalParams =
-                    { Lint.OptionalLintParameters.Default with
-                        Configuration = configParam
-                        ReportLinterProgress =
-                            Some(fun progress ->
-                                match progress with
-                                | Lint.ProjectProgress.Failed(_, ex) -> lintException <- Some ex
-                                | _ -> ()) }
+                    let mutable lintException: exn option = None
 
-                match Lint.lintParsedFile optionalParams parsedFileInfo context.FileName with
-                | LintResult.Success warnings ->
-                    match lintException with
-                    | Some ex ->
-                        // lintParsedFile swallows exceptions via ReportLinterProgress(Failed);
-                        // surface them so they're not silently lost.
-                        return
-                            configDiagnostics
-                            @ (warnings |> List.map mapWarning)
-                            @ [ makeErrorMessage
-                                    "FSharpLint.InternalError"
-                                    $"FSharpLint internal error: {ex.GetType().Name}: {ex.Message}" ]
-                    | None -> return configDiagnostics @ (warnings |> List.map mapWarning)
-                | LintResult.Failure failure ->
-                    return configDiagnostics @ [ makeErrorMessage "FSharpLint.Error" failure.Description ]
+                    let optionalParams =
+                        { Lint.OptionalLintParameters.Default with
+                            Configuration = configParam
+                            ReportLinterProgress =
+                                Some(fun progress ->
+                                    match progress with
+                                    | Lint.ProjectProgress.Failed(_, ex) -> lintException <- Some ex
+                                    | _ -> ()) }
+
+                    match Lint.lintParsedFile optionalParams parsedFileInfo context.FileName with
+                    | LintResult.Success warnings ->
+                        match lintException with
+                        | Some ex ->
+                            // lintParsedFile swallows exceptions via ReportLinterProgress(Failed);
+                            // surface them so they're not silently lost.
+                            return
+                                configDiagnostics
+                                @ (warnings |> List.map mapWarning)
+                                @ [ makeErrorMessage
+                                        "FSharpLint.InternalError"
+                                        $"FSharpLint internal error: {ex.GetType().Name}: {ex.Message}" ]
+                        | None -> return configDiagnostics @ (warnings |> List.map mapWarning)
+                    | LintResult.Failure failure ->
+                        return configDiagnostics @ [ makeErrorMessage "FSharpLint.Error" failure.Description ]
         }
 
 [<CliAnalyzer("FSharpLint", "All FSharpLint rules via FSharp.Analyzers.SDK")>]

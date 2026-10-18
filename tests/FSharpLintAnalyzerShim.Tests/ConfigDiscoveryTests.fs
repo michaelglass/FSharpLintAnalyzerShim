@@ -191,3 +191,73 @@ let ``Cache hit at an ancestor directory back-fills the walked subdirectories`` 
         test <@ obj.ReferenceEquals(parentResult, childResult) @>
     finally
         Directory.Delete(parentDir, true)
+
+[<Fact>]
+let ``With no fsharplint.json in the hierarchy, a second lookup is a cache hit with no recorded origin`` () =
+    let tempDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"))
+    Directory.CreateDirectory(tempDir) |> ignore
+
+    try
+        let fakeFile = Path.Combine(tempDir, "Test.fs")
+        File.WriteAllText(fakeFile, "module Test")
+
+        configCache.Clear()
+        configOrigins.Clear()
+
+        let result1, _ = getConfigParam fakeFile
+        let result2, _ = getConfigParam fakeFile
+
+        // Nothing to re-read: the default config is served from the cache as-is.
+        test <@ not (configOrigins.ContainsKey tempDir) @>
+        test <@ obj.ReferenceEquals(result1, result2) @>
+    finally
+        Directory.Delete(tempDir, true)
+
+[<Fact>]
+let ``A config with no ignoreFiles key ignores nothing`` () =
+    let config =
+        Lint.ConfigurationParam.Configuration(FSharpLint.Framework.Configuration.parseConfig "{}")
+
+    test <@ not (isIgnoredFile config (Path.Combine(Path.GetTempPath(), "Any.fs"))) @>
+
+[<Fact>]
+let ``positive control: a config whose ignoreFiles names the file ignores it`` () =
+    let config =
+        Lint.ConfigurationParam.Configuration(
+            FSharpLint.Framework.Configuration.parseConfig """{ "ignoreFiles": [ "Generated/Any.fs" ] }"""
+        )
+
+    test <@ isIgnoredFile config (Path.Combine(Path.GetTempPath(), "Generated", "Any.fs")) @>
+
+[<Fact>]
+let ``Editing one fsharplint.json re-reads only the directories parsed from it`` () =
+    let rootA = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"))
+    let rootB = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"))
+    Directory.CreateDirectory(rootA) |> ignore
+    Directory.CreateDirectory(rootB) |> ignore
+
+    try
+        File.WriteAllText(Path.Combine(rootA, "fsharplint.json"), "{}")
+        File.WriteAllText(Path.Combine(rootB, "fsharplint.json"), "{}")
+        let fileA = Path.Combine(rootA, "A.fs")
+        let fileB = Path.Combine(rootB, "B.fs")
+
+        configCache.Clear()
+        configOrigins.Clear()
+
+        let a1, _ = getConfigParam fileA
+        let b1, _ = getConfigParam fileB
+
+        File.WriteAllText(Path.Combine(rootA, "fsharplint.json"), """{ "ignoreFiles": [] }""")
+
+        let a2, _ = getConfigParam fileA
+        let b2, _ = getConfigParam fileB
+
+        // The edited config is re-parsed; the untouched one is still the cached instance.
+        test <@ not (obj.ReferenceEquals(a1, a2)) @>
+        test <@ obj.ReferenceEquals(b1, b2) @>
+    finally
+        configCache.Clear()
+        configOrigins.Clear()
+        Directory.Delete(rootA, true)
+        Directory.Delete(rootB, true)

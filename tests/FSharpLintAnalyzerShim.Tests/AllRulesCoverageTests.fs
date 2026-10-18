@@ -382,3 +382,108 @@ let ``internal FSharpLint exception surfaces as an InternalError warning alongsi
     finally
         configCache.Clear()
         Directory.Delete(tempDir, true)
+
+/// An interface-naming violation (FL0036) and a config enabling only that rule — the
+/// smallest shape where "linted" and "not linted" are distinguishable.
+let private interfaceViolation =
+    "module Probe\n\ntype iMyInterface =\n    abstract member DoStuff: unit -> unit\n"
+
+let private interfaceNamesConfig (enabled: bool) (ignoreFiles: string list) =
+    let globs = ignoreFiles |> List.map (sprintf "\"%s\"") |> String.concat ", "
+
+    $$"""{ "ignoreFiles": [ {{globs}} ],
+  "interfaceNames": { "enabled": {{(if enabled then "true" else "false")}},
+    "config": { "naming": "PascalCase", "underscores": "None", "prefix": "I" } } }"""
+
+let private withTempTree (body: string -> unit) =
+    let tempDir = Path.Combine(Path.GetTempPath(), System.Guid.NewGuid().ToString("N"))
+    Directory.CreateDirectory(Path.Combine(tempDir, "src", "Generated")) |> ignore
+
+    try
+        configCache.Clear()
+        configOrigins.Clear()
+        body tempDir
+    finally
+        configCache.Clear()
+        configOrigins.Clear()
+        Directory.Delete(tempDir, true)
+
+let private fl0036 (messages: Message list) =
+    messages |> List.filter (fun m -> m.Code = "FL0036")
+
+[<Fact>]
+let ``a file matched by ignoreFiles yields no findings`` () =
+    withTempTree (fun root ->
+        File.WriteAllText(
+            Path.Combine(root, "fsharplint.json"),
+            interfaceNamesConfig true [ "src/Generated/Types.fs" ]
+        )
+
+        let ignored = Path.Combine(root, "src", "Generated", "Types.fs")
+        File.WriteAllText(ignored, interfaceViolation)
+
+        let messages = lintAnalyzer (buildCliContext ignored) |> Async.RunSynchronously
+
+        test <@ messages |> List.isEmpty @>)
+
+[<Fact>]
+let ``positive control: a sibling not matched by ignoreFiles is still linted`` () =
+    withTempTree (fun root ->
+        File.WriteAllText(
+            Path.Combine(root, "fsharplint.json"),
+            interfaceNamesConfig true [ "src/Generated/Types.fs" ]
+        )
+
+        let linted = Path.Combine(root, "src", "Generated", "Other.fs")
+        File.WriteAllText(linted, interfaceViolation)
+
+        let messages = lintAnalyzer (buildCliContext linted) |> Async.RunSynchronously
+
+        test <@ not (List.isEmpty (fl0036 messages)) @>)
+
+[<Fact>]
+let ``an fsharplint.json edit between two lint calls in one process is seen by the second`` () =
+    withTempTree (fun root ->
+        let config = Path.Combine(root, "fsharplint.json")
+        let source = Path.Combine(root, "src", "Probe.fs")
+        File.WriteAllText(source, interfaceViolation)
+        let ctx = buildCliContext source
+
+        File.WriteAllText(config, interfaceNamesConfig true [])
+        let before = lintAnalyzer ctx |> Async.RunSynchronously
+        // Positive control: the first call ran under the enabling config.
+        test <@ not (List.isEmpty (fl0036 before)) @>
+
+        File.WriteAllText(config, interfaceNamesConfig false [])
+        let after = lintAnalyzer ctx |> Async.RunSynchronously
+        test <@ List.isEmpty (fl0036 after) @>)
+
+[<Fact>]
+let ``an ignoreFiles entry added between two lint calls is honoured by the second`` () =
+    withTempTree (fun root ->
+        let config = Path.Combine(root, "fsharplint.json")
+        let source = Path.Combine(root, "src", "Generated", "Types.fs")
+        File.WriteAllText(source, interfaceViolation)
+        let ctx = buildCliContext source
+
+        File.WriteAllText(config, interfaceNamesConfig true [])
+        test <@ not (List.isEmpty (fl0036 (lintAnalyzer ctx |> Async.RunSynchronously))) @>
+
+        File.WriteAllText(config, interfaceNamesConfig true [ "src/Generated/Types.fs" ])
+        test <@ lintAnalyzer ctx |> Async.RunSynchronously |> List.isEmpty @>)
+
+[<Fact>]
+let ``deleting the fsharplint.json between two lint calls falls back to the default config`` () =
+    withTempTree (fun root ->
+        let config = Path.Combine(root, "fsharplint.json")
+        let source = Path.Combine(root, "src", "Probe.fs")
+        File.WriteAllText(source, interfaceViolation)
+        let ctx = buildCliContext source
+
+        File.WriteAllText(config, interfaceNamesConfig false [])
+        // Control: the disabling config was in force for the first call.
+        test <@ List.isEmpty (fl0036 (lintAnalyzer ctx |> Async.RunSynchronously)) @>
+
+        File.Delete config
+        // FSharpLint's default config enables InterfaceNames.
+        test <@ not (List.isEmpty (fl0036 (lintAnalyzer ctx |> Async.RunSynchronously))) @>)
