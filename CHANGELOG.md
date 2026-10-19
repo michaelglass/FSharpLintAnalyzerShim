@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.6.0-alpha.1 - 2026-10-19
+
 - fix: files listed in `ignoreFiles` are no longer linted. FSharpLint applies `ignoreFiles` only when it lints a whole project itself; the shim lints one file at a time through `lintParsedFile`, which never checks it, so every ignored file (a generated one, typically) was reported anyway. The shim now asks FSharpLint's own matcher (`IgnoreFiles.shouldFileBeIgnored`) before linting a file.
 - fix: an edit to `fsharplint.json` is now seen by a long-running analyzer host. The parsed config was cached per directory for the life of the process, so a daemon kept linting with the settings it first read, while a host that keys its result cache on the config file stored those results under the new settings. Each cached config now remembers the text it was parsed from and is re-read when the file changes or is deleted.
 - fix: the package project now builds with `TreatWarningsAsErrors` and `GenerateDocumentationFile`, and references `Microsoft.SourceLink.GitHub` 10.0.303, so the published package links its symbols to the source on GitHub. The package's bundled dependencies now leave out runtime-specific (`runtimes/<rid>/…`) copies explicitly. NuGet already dropped the one such copy, a Windows build of `System.Security.Cryptography.Pkcs`, with warning NU5118, so the package contents are unchanged.
