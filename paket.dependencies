@@ -5,7 +5,7 @@ storage: none
 nuget FSharp.Analyzers.SDK 0.36.0
 
 // Vendored fork of FSharpLint (branch fix/sourcelink-security-20260912, commit
-// 019da3dc in paket.lock): upstream v0.27.0 plus
+// 7f88c5a0 in paket.lock): upstream v0.27.0 plus
 //  - a TransparentCompiler guard: FSharpProjectContext.ProjectOptions throws when
 //    check results come from FCS's TransparentCompiler (the shim's host uses it),
 //    so the fork degrades it to None instead of failing the file; upstream Lint.fs
