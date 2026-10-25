@@ -261,3 +261,49 @@ let ``Editing one fsharplint.json re-reads only the directories parsed from it``
         configOrigins.Clear()
         Directory.Delete(rootA, true)
         Directory.Delete(rootB, true)
+
+[<Fact>]
+let ``With no fsharplint.json in the hierarchy, an ancestor cache hit back-fills subdirectories without an origin`` () =
+    // Covers the `None` arm of the back-fill `origin |> Option.iter` in getConfigParam:
+    // a cache hit at an ancestor whose config did not come from any fsharplint.json.
+    let parentDir = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"))
+    let childDir = Path.Combine(parentDir, "src")
+    Directory.CreateDirectory(childDir) |> ignore
+
+    try
+        configCache.Clear()
+        configOrigins.Clear()
+
+        let parentResult, _ = getConfigParam (Path.Combine(parentDir, "Test.fs"))
+        test <@ configCache.ContainsKey parentDir @>
+        test <@ not (configCache.ContainsKey childDir) @>
+
+        let childResult, childDiagnostics =
+            getConfigParam (Path.Combine(childDir, "Child.fs"))
+
+        test <@ configCache.ContainsKey childDir @>
+        test <@ not (configOrigins.ContainsKey childDir) @>
+        test <@ obj.ReferenceEquals(parentResult, childResult) @>
+        test <@ childDiagnostics |> List.isEmpty @>
+    finally
+        configCache.Clear()
+        configOrigins.Clear()
+        Directory.Delete(parentDir, true)
+
+[<Fact>]
+let ``An explicit null ignoreFiles parses as absent and ignores nothing`` () =
+    // isIgnoredFile maps over the `Some globs` array; this pins that FSharpLint's parser
+    // never yields `Some null`, so a JSON null cannot reach that map as a null array.
+    let parsed =
+        FSharpLint.Framework.Configuration.parseConfig """{ "ignoreFiles": null }"""
+
+    test <@ parsed.ignoreFiles = None @>
+
+    test
+        <@
+            not (
+                isIgnoredFile
+                    (Lint.ConfigurationParam.Configuration parsed)
+                    (Path.Combine(Path.GetTempPath(), "Any.fs"))
+            )
+        @>

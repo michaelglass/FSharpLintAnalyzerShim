@@ -52,7 +52,8 @@ let internal configCache =
 let private exceptionSummary (err: string) : string =
     err.Split('\n')
     |> Array.takeWhile (fun line -> not (line.TrimStart().StartsWith("at ")))
-    |> Array.map (fun line -> line.Trim())
+    // Seq.map, not the inline Array.map, whose null-array guard can never fire here.
+    |> Seq.map (fun line -> line.Trim())
     |> String.concat " "
 
 /// Diagnostic emitted when a discovered fsharplint.json cannot be parsed.
@@ -90,8 +91,10 @@ let private staleOrigin (dir: string) : string option =
     | _ -> None
 
 /// Drop every cached directory whose config was parsed from `configPath`.
+/// Iterates a snapshot array: a `for` over the live dictionary compiles to an
+/// enumerator `finally` with a not-IDisposable arm that can never run.
 let private evict (configPath: string) =
-    for KeyValue(dir, (origin, _)) in configOrigins do
+    for KeyValue(dir, (origin, _)) in configOrigins.ToArray() do
         if origin = configPath then
             configCache.TryRemove dir |> ignore
             configOrigins.TryRemove dir |> ignore
@@ -164,10 +167,12 @@ let internal isIgnoredFile (configParam: ConfigurationParam) (filePath: string) 
     | ConfigurationParam.Configuration config ->
         match config.ignoreFiles with
         | Some globs ->
+            // List.map, not the inline Array.map: the latter inlines a null-array guard
+            // here that can never fire (the parser yields None, not Some null).
             let parsed =
                 globs
-                |> Array.map FSharpLint.Framework.Configuration.IgnoreFiles.parseIgnorePath
                 |> Array.toList
+                |> List.map FSharpLint.Framework.Configuration.IgnoreFiles.parseIgnorePath
 
             FSharpLint.Framework.Configuration.IgnoreFiles.shouldFileBeIgnored parsed (Path.GetFullPath filePath)
         | None -> false
