@@ -230,6 +230,21 @@ let ``positive control: a config whose ignoreFiles names the file ignores it`` (
     test <@ isIgnoredFile config (Path.Combine(Path.GetTempPath(), "Generated", "Any.fs")) @>
 
 [<Fact>]
+let ``An ignoreFiles ** segment matches any number of directories`` () =
+    let config =
+        Lint.ConfigurationParam.Configuration(
+            FSharpLint.Framework.Configuration.parseConfig """{ "ignoreFiles": [ "**/obj/**/*.fs" ] }"""
+        )
+
+    let underObj (segments: string list) =
+        Path.Combine(Array.ofList (Path.GetTempPath() :: "repo" :: "obj" :: segments))
+
+    test <@ isIgnoredFile config (underObj [ "X.fs" ]) @>
+    test <@ isIgnoredFile config (underObj [ "Debug"; "X.fs" ]) @>
+    test <@ isIgnoredFile config (underObj [ "Debug"; "net10.0"; "X.fs" ]) @>
+    test <@ not (isIgnoredFile config (Path.Combine(Path.GetTempPath(), "repo", "src", "X.fs"))) @>
+
+[<Fact>]
 let ``Editing one fsharplint.json re-reads only the directories parsed from it`` () =
     let rootA = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"))
     let rootB = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"))

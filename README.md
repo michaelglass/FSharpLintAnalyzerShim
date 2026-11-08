@@ -131,7 +131,7 @@ mise run test     # tests only
 ## Dependencies
 
 FSharpLint.Core is pulled from [michaelglass/FSharpLint](https://github.com/michaelglass/FSharpLint)
-(`fix/sourcelink-security-20260912` branch; `paket.lock` pins commit `7f88c5a0`) via a
+(`fix/sourcelink-security-20260912` branch; `paket.lock` pins commit `08f601af`) via a
 Paket git dependency. That branch is upstream FSharpLint v0.27.0 plus a TransparentCompiler
 guard on `ProjectOptions` and patched build and transitive dependencies. It merges
 [Numpsy's `fcs10` branch](https://github.com/numpsy/FSharpLint/tree/fcs10), which

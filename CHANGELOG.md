@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- fix: an `ignoreFiles` `**` segment now matches zero or more directories, so `**/obj/**/*.fs` also ignores `obj/Debug/net10.0/X.fs`. It used to match exactly one directory. The fix is in the bundled `FSharpLint.Core` fork; `*` still matches within a single segment.
+
 ## 0.6.0-alpha.1 - 2026-10-19
 
 - fix: files listed in `ignoreFiles` are no longer linted. FSharpLint applies `ignoreFiles` only when it lints a whole project itself; the shim lints one file at a time through `lintParsedFile`, which never checks it, so every ignored file (a generated one, typically) was reported anyway. The shim now asks FSharpLint's own matcher (`IgnoreFiles.shouldFileBeIgnored`) before linting a file.

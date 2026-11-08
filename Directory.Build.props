@@ -26,7 +26,7 @@
        and it resolves the package through its own Directory.Packages.props.
        The fork therefore pins the package itself: its Directory.Packages.props
        is on 10.0.13 (Xml and Pkcs) on branch fix/sourcelink-security-20260912 (commit
-       7f88c5a0, which paket.lock pins), with no NU1903 suppression. Dropping the
+       08f601af, which paket.lock pins), with no NU1903 suppression. Dropping the
        fork would remove the whole class: as a NuGet package rather than a
        vendored project, FSharpLint.Core stops carrying its own build config and
        falls back under this pin. -->
