@@ -31,4 +31,4 @@ NUGET
     System.Runtime.CompilerServices.Unsafe (6.1.2) - restriction: >= net8.0
 GIT
   remote: https://github.com/michaelglass/FSharpLint.git
-     (08f601afb241072d7878a0b808035fa87a44f035)
+     (50e34b163d16dbe928d469936f81d8ca4c38e1dc)

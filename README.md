@@ -34,7 +34,7 @@ All rule logic lives in FSharpLint.Core; this project contains no rules of its o
 - [Paket](https://fsprojects.github.io/Paket/): `dotnet tool install -g paket`
 
 > **Heads-up:** the published `fsharp-analyzers` 0.36.0 ships an FCS version this shim
-> can't bind against, so you currently need an analyzer host on the FCS 43.12 line to
+> can't bind against, so you currently need an analyzer host on the FCS 43.13 line to
 > run it. See [Host compatibility](docs/host-compatibility.md).
 
 <!-- sync:build-and-run:start -->
@@ -137,8 +137,8 @@ guard on `ProjectOptions` and patched build and transitive dependencies. It merg
 [Numpsy's `fcs10` branch](https://github.com/numpsy/FSharpLint/tree/fcs10), which
 updated FSharpLint to FSharp.Compiler.Service 43.x — huge thanks to
 [Numpsy (Richard Webb)](https://github.com/numpsy) for that work. It tracks the FCS
-43.12 line and adds a two-phase lint API for analyzer integration. The shim pins FCS to
-43.12.204; see [Host compatibility](docs/host-compatibility.md) for what that means for
+43.13 line and adds a two-phase lint API for analyzer integration. The shim pins FCS to
+43.13.101; see [Host compatibility](docs/host-compatibility.md) for what that means for
 the host you run it under.
 
 ## More

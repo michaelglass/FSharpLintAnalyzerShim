@@ -247,7 +247,25 @@ let ``SDK loader registers the shim and runs its real naming diagnostic`` () =
         test <@ loaded.FailedAssemblies = 0 @>
         test <@ loaded.AnalyzerNames = [ "FSharpLint" ] @>
 
-        let messages = client.RunAnalyzers context |> Async.RunSynchronously
+        let results = client.RunAnalyzers context |> Async.RunSynchronously
+
+        // RunAnalyzers (SDK 0.41+) reports a throwing analyzer as an Error result
+        // instead of dropping it, so a crash must fail this test, not just lose messages.
+        let failures =
+            results
+            |> List.choose (fun result ->
+                match result.Output with
+                | Ok _ -> None
+                | Error ex -> Some $"%s{result.AnalyzerName}: %s{ex.Message}")
+
+        test <@ List.isEmpty failures @>
+
+        let messages =
+            results
+            |> List.collect (fun result ->
+                match result.Output with
+                | Ok messages -> messages
+                | Error _ -> [])
 
         test
             <@

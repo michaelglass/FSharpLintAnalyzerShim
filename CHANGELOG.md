@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- deps!: build against FSharp.Compiler.Service 43.13.101 and FSharp.Core 11.0.101 (the .NET 11 SDK band) and FSharp.Analyzers.SDK 0.42 (prerelease `0.42.0-fcs4313.4`, packed from the SDK's `fcs-43.13` branch; it is not on nuget.org). The bundled `FSharpLint.Core` fork moves to its `fcs-43.13` branch, which ports the rules to FCS 43.13's record spreads and the `SynComponentInfo` change. The host guard now expects the FCS 43.13 line, so a host on 43.12 gets the `FL0000` host-incompatible warning instead of a `MissingMethodException`; run the shim under a 43.13 host.
+
 - fix: an `ignoreFiles` `**` segment now matches zero or more directories, so `**/obj/**/*.fs` also ignores `obj/Debug/net10.0/X.fs`. It used to match exactly one directory. The fix is in the bundled `FSharpLint.Core` fork; `*` still matches within a single segment.
 
 ## 0.6.0-alpha.1 - 2026-10-19

@@ -14,7 +14,7 @@ do ()
 /// The FCS major.minor line this shim is compiled against (see fsproj FCS pin).
 /// FSharpLint.Core's AST-typed surface is binary-coupled to this line, so an
 /// analyzer host loading a different FCS minor version cannot run the shim.
-let internal expectedFcsMajorMinor = (43, 12)
+let internal expectedFcsMajorMinor = (43, 13)
 
 /// Pure check: given the FCS assembly version a host actually loaded, return the
 /// diagnostics to surface when its major.minor differs from the line the shim was

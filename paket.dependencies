@@ -4,8 +4,8 @@ storage: none
 
 nuget FSharp.Analyzers.SDK 0.36.0
 
-// Vendored fork of FSharpLint (branch fix/sourcelink-security-20260912, commit
-// 08f601af in paket.lock): upstream v0.27.0 plus
+// Vendored fork of FSharpLint (branch fcs-43.13, commit 50e34b16 in paket.lock;
+// fix/sourcelink-security-20260912 at 08f601af plus the FCS 43.13 port): upstream v0.27.0 plus
 //  - a TransparentCompiler guard: FSharpProjectContext.ProjectOptions throws when
 //    check results come from FCS's TransparentCompiler (the shim's host uses it),
 //    so the fork degrades it to None instead of failing the file; upstream Lint.fs
@@ -13,10 +13,10 @@ nuget FSharp.Analyzers.SDK 0.36.0
 //  - build-time security fixes: Microsoft.SourceLink.GitHub 10.0.303 (patched
 //    Microsoft.Build.Tasks.Git, CVE-2026-62900) and NuGet.Protocol 6.12.5 in the
 //    build script (GHSA-g4vj-cjjj-v7hg);
-//  - FCS 43.12.202 / FSharp.Core 10.1.202 pins, and lazy breadcrumb/source
+//  - FCS 43.13.101 / FSharp.Core 11.0.101 pins (the .NET 11 band; record spreads), and lazy breadcrumb/source
 //    extraction in UselessBinding and FavourIgnoreOverLetWild for large files.
 //  - an ignoreFiles matcher whose `**` segment matches zero or more directories
 //    (upstream matches exactly one).
 // Waiting on fsprojects/FSharpLint#872 (project-context wrapper). Once it ships in an
 // upstream release or nightly, drop this git-dep and use upstream FSharpLint.Core.
-git https://github.com/michaelglass/FSharpLint.git fix/sourcelink-security-20260912
+git https://github.com/michaelglass/FSharpLint.git fcs-43.13
