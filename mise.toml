@@ -73,7 +73,7 @@ depends = ["restore", "paket-restore"]
 
 [tasks.check-api]
 description = "Check API changes since last release"
-run = "dotnet tool run fssemantictagger check"
+run = "dotnet tool run fssemantictagger release --dry-run"
 depends = ["restore", "tool-restore"]
 
 [tasks.release]
